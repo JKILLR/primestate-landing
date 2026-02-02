@@ -136,19 +136,6 @@
             z-index: 1000;
         }
         
-        /* Glow cursor */
-        .glow-cursor {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(154, 239, 140, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            transition: width 0.3s, height 0.3s;
-        }
-        
         /* Scroll progress */
         .scroll-progress {
             position: fixed;
@@ -887,7 +874,6 @@
                 display: none;
             }
             
-            .glow-cursor,
             .particles,
             .scroll-indicator,
             .data-stream {
@@ -900,7 +886,6 @@
     <div class="top-cover"></div>
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="grid-bg"></div>
-    <div class="glow-cursor" id="glowCursor"></div>
     
     <div class="particles" id="particles"></div>
     
@@ -1088,29 +1073,6 @@
             particle.style.animationDuration = (12 + Math.random() * 8) + 's';
             particlesContainer.appendChild(particle);
         }
-        
-        // Glow cursor
-        const glowCursor = document.getElementById('glowCursor');
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let cursorX = mouseX;
-        let cursorY = mouseY;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        
-        function animateCursor() {
-            const dx = mouseX - cursorX;
-            const dy = mouseY - cursorY;
-            cursorX += dx * 0.08;
-            cursorY += dy * 0.08;
-            glowCursor.style.left = cursorX + 'px';
-            glowCursor.style.top = cursorY + 'px';
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
         
         // Scroll progress
         const scrollProgress = document.getElementById('scrollProgress');
