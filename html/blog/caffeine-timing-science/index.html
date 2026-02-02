@@ -266,18 +266,24 @@
         
         .cta-button {
             display: inline-block;
-            background: var(--green);
-            color: var(--bg-primary);
+            background: transparent;
+            color: var(--green);
             padding: 12px 28px;
-            border-radius: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--green);
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .cta-button::before {
+            content: '$ ';
+            opacity: 0.6;
         }
         
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(154, 239, 140, 0.3);
+            background: var(--green-dim);
             text-decoration: none;
         }
         
