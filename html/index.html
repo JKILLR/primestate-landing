@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrimeState — Your Personal Cognitive Intelligence</title>
+    <meta name="description" content="Track your mental state and discover what actually affects YOUR brain. Personal patterns, not generic advice. Delayed correlations most people miss.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #101012;
+            --bg-card: #1A1A1C;
+            --bg-elevated: #212124;
+            --text-primary: #FAFAFA;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --green: #9AEF8C;
+            --green-dim: rgba(154, 239, 140, 0.15);
+            --green-subtle: rgba(154, 239, 140, 0.08);
+            --cyan: #22D3EE;
+            --amber: #F59E0B;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-muted: rgba(255, 255, 255, 0.12);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .top-cover {
+            position: fixed;
+            top: -200px;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: var(--bg-primary);
+            z-index: 101;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Animated grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(154, 239, 140, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(154, 239, 140, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -2;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+        
+        /* Floating data particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            font-size: 0.6rem;
+            color: var(--green);
+            opacity: 0;
+            animation: float-up 15s linear infinite;
+        }
+        
+        @keyframes float-up {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(10deg);
+            }
+        }
+        
+        /* Scan line effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0) 0px,
+                rgba(0, 0, 0, 0) 2px,
+                rgba(0, 0, 0, 0.02) 2px,
+                rgba(0, 0, 0, 0.02) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Glow cursor */
+        .glow-cursor {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(154, 239, 140, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: width 0.3s, height 0.3s;
+        }
+        
+        /* Scroll progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green), var(--cyan));
+            z-index: 1001;
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            padding-top: max(20px, env(safe-area-inset-top, 20px));
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: padding 0.3s, background 0.3s;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--bg-primary);
+        }
+        
+        header.scrolled {
+            padding: 14px 0;
+            padding-top: max(14px, env(safe-area-inset-top, 14px));
+            background: var(--bg-primary);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .logo-prompt {
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+        
+        .logo:hover .logo-prompt {
+            color: var(--green);
+        }
+        
+        .logo-text {
+            color: var(--green);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        
+        .logo-cursor {
+            color: var(--green);
+            animation: blink 1.2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 45% { opacity: 1; }
+            50%, 95% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .cta-button {
+            background: var(--green);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 40px rgba(154, 239, 140, 0.5);
+        }
+        
+        /* Reveal animations - SLOWER */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .reveal-delay-1 { transition-delay: 0.2s; }
+        .reveal-delay-2 { transition-delay: 0.4s; }
+        .reveal-delay-3 { transition-delay: 0.6s; }
+        .reveal-delay-4 { transition-delay: 0.8s; }
+        
+        /* Hero */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--green-dim);
+            border: 1px solid rgba(154, 239, 140, 0.2);
+            border-radius: 4px;
+            font-size: 0.65rem;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { 
+                border-color: rgba(154, 239, 140, 0.2);
+                box-shadow: 0 0 0 rgba(154, 239, 140, 0);
+            }
+            50% { 
+                border-color: rgba(154, 239, 140, 0.5);
+                box-shadow: 0 0 20px rgba(154, 239, 140, 0.2);
+            }
+        }
+        
+        h1 {
+            font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+        
+        h1 .accent {
+            color: var(--green);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1 .accent::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--green);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s;
+        }
+        
+        h1.visible .accent::after {
+            transform: scaleX(1);
+        }
+        
+        .hero-sub {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 0 auto 40px;
+            font-weight: 400;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .app-store-badge {
+            height: 48px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        filter 0.4s;
+            filter: brightness(0.9);
+        }
+        
+        .app-store-badge:hover {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+        
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fade-in-up 1s 1.5s both;
+        }
+        
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .scroll-indicator .mouse {
+            width: 24px;
+            height: 38px;
+            border: 2px solid var(--text-muted);
+            border-radius: 12px;
+            position: relative;
+        }
+        
+        .scroll-indicator .mouse::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 4px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            animation: scroll-mouse 2s ease-in-out infinite;
+        }
+        
+        @keyframes scroll-mouse {
+            0%, 100% { 
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            50% { 
+                opacity: 0.3;
+                transform: translateX(-50%) translateY(12px);
+            }
+        }
+        
+        /* Value Props */
+        .value-props {
+            padding: 100px 0;
+            border-top: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .value-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--green), transparent);
+            transform: scaleX(0);
+            transition: transform 0.6s;
+        }
+        
+        .value-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .value-card:hover {
+            border-color: rgba(154, 239, 140, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(154, 239, 140, 0.1);
+        }
+        
+        .value-label {
+            font-size: 0.6rem;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+        
+        .value-card h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .value-card p {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+        
+        /* How It Works */
+        .how-section {
+            padding: 100px 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+        
+        .section-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 48px;
+            text-align: center;
+        }
+        
+        .steps {
+            display: grid;
+            gap: 32px;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 48px;
+            bottom: 48px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--green), var(--cyan), var(--green));
+            opacity: 0.3;
+        }
+        
+        .step {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        
+        .step-num {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            background: var(--green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #000;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step:hover .step-num {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 0 30px rgba(154, 239, 140, 0.6);
+        }
+        
+        .step-content {
+            padding-top: 8px;
+        }
+        
+        .step-content h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+        
+        /* Features Detail */
+        .features-section {
+            padding: 100px 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+        
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 80px;
+            align-items: center;
+        }
+        
+        .feature-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .feature-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .feature-text p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        
+        .feature-example {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            font-size: 0.8rem;
+            transition: all 0.5s;
+            position: relative;
+        }
+        
+        .feature-example::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 17px;
+            background: linear-gradient(135deg, var(--green), transparent, var(--cyan));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .feature-example:hover::after {
+            opacity: 0.3;
+        }
+        
+        .feature-example:hover {
+            border-color: transparent;
+            transform: scale(1.02);
+        }
+        
+        .example-label {
+            color: var(--text-muted);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .example-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.3s;
+        }
+        
+        .example-item:hover {
+            padding-left: 8px;
+            background: var(--green-subtle);
+            margin: 0 -8px;
+            padding-right: 8px;
+        }
+        
+        .example-item:last-of-type {
+            border-bottom: none;
+        }
+        
+        .example-metric {
+            color: var(--text-secondary);
+        }
+        
+        .example-value {
+            color: var(--green);
+            font-weight: 600;
+        }
+        
+        .example-value.negative {
+            color: var(--amber);
+        }
+        
+        /* Animated counter */
+        .counter {
+            display: inline-block;
+            min-width: 2ch;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, var(--green-dim), rgba(34, 211, 238, 0.05));
+            border-left: 3px solid var(--green);
+            padding: 16px 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+            margin-top: 16px;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .insight-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(154, 239, 140, 0.1) 25%, rgba(154, 239, 140, 0.2) 50%, rgba(154, 239, 140, 0.1) 75%, transparent 100%);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+        }
+        
+        /* Live data simulation */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.55rem;
+            color: var(--green);
+            padding: 4px 10px;
+            background: var(--green-dim);
+            border-radius: 20px;
+        }
+        
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: live-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes live-pulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(154, 239, 140, 0);
+            }
+            50% { 
+                opacity: 0.6; 
+                transform: scale(0.8);
+                box-shadow: 0 0 10px rgba(154, 239, 140, 0.5);
+            }
+        }
+        
+        /* Data stream visualization */
+        .data-stream {
+            position: absolute;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.5rem;
+            color: var(--green);
+            opacity: 0.15;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        
+        .data-stream span {
+            display: block;
+            animation: stream-flow 8s linear infinite;
+        }
+        
+        @keyframes stream-flow {
+            0% { transform: translateX(100px); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateX(-200px); opacity: 0; }
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            border-top: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        
+        .cta-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-muted);
+            border-radius: 20px;
+            padding: 48px 40px;
+            text-align: center;
+            max-width: 520px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s;
+        }
+        
+        .cta-box:hover {
+            border-color: rgba(154, 239, 140, 0.3);
+            box-shadow: 0 0 60px rgba(154, 239, 140, 0.15);
+        }
+        
+        .terminal-output {
+            text-align: left;
+            margin-bottom: 28px;
+            font-size: 0.7rem;
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .terminal-line {
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            opacity: 0;
+            transform: translateX(-20px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-line.visible {
+            animation: terminal-type 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        @keyframes terminal-type {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .terminal-line .prompt {
+            color: var(--green);
+        }
+        
+        .terminal-line .success {
+            color: var(--green);
+        }
+        
+        .terminal-line .loading {
+            display: inline-block;
+            width: 12px;
+            text-align: left;
+        }
+        
+        .cta-box h2 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .cta-box > p {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 0.85rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+        
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--green);
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 120px 0 80px;
+                min-height: auto;
+            }
+            
+            .feature-row {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-num {
+                margin: 0 auto;
+            }
+            
+            .steps::before {
+                display: none;
+            }
+            
+            .glow-cursor,
+            .particles,
+            .scroll-indicator,
+            .data-stream {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-cover"></div>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="grid-bg"></div>
+    <div class="glow-cursor" id="glowCursor"></div>
+    
+    <div class="particles" id="particles"></div>
+    
+    <header id="header">
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-prompt">></span>
+                <span class="logo-text">PrimeState</span>
+                <span class="logo-cursor">_</span>
+            </div>
+            <a href="https://apps.apple.com/ca/app/primestate/id6757972046" class="cta-button">Download Free</a>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="container">
+                <span class="hero-label reveal">Personal Cognitive Intelligence</span>
+                <h1 class="reveal reveal-delay-1" id="heroTitle">Your brain is unique.<br><span class="accent">Learn what actually works for it.</span></h1>
+                <p class="hero-sub reveal reveal-delay-2">Track your mental state. Log what you consume. PrimeState finds the patterns — including delayed effects that take days to show up.</p>
+                <div class="hero-cta reveal reveal-delay-3">
+                    <a href="https://apps.apple.com/ca/app/primestate/id6757972046">
+                        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" class="app-store-badge">
+                    </a>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <span>Scroll</span>
+            </div>
+        </section>
+        
+        <section class="value-props">
+            <div class="container">
+                <div class="value-grid">
+                    <div class="value-card reveal">
+                        <div class="value-label">The Problem</div>
+                        <h3>Generic advice doesn't work</h3>
+                        <p>"Drink more water" and "sleep 8 hours" are fine — but your body isn't average. What actually moves the needle for YOUR focus, energy, and clarity?</p>
+                    </div>
+                    <div class="value-card reveal reveal-delay-1">
+                        <div class="value-label">The Insight</div>
+                        <h3>Effects are often delayed</h3>
+                        <p>That brain fog today? Could be something you ate 48 hours ago. Most people never connect these dots. PrimeState tracks delayed correlations automatically.</p>
+                    </div>
+                    <div class="value-card reveal reveal-delay-2">
+                        <div class="value-label">The Result</div>
+                        <h3>Confirmed patterns, not guesses</h3>
+                        <p>After enough data, patterns become statistically confirmed. You'll know with confidence what helps and what hurts — unique to you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="how-section">
+            <div class="container">
+                <div class="section-label reveal">How It Works</div>
+                <div class="steps">
+                    <div class="step reveal">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h3>Log your state</h3>
+                            <p>Quick daily check-ins on focus, energy, and clarity. Takes a few seconds.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal reveal-delay-1">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h3>Track what you consume</h3>
+                            <p>Type naturally — "eggs and coffee this morning" — or use quick buttons. Voice input works too.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal reveal-delay-2">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h3>Get personal insights</h3>
+                            <p>As patterns emerge, you'll see confirmed correlations with confidence levels. Data-driven suggestions, not generic tips.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="features-section">
+            <div class="container">
+                <div class="section-label reveal">What You'll Discover</div>
+                
+                <div class="feature-row">
+                    <div class="feature-text reveal">
+                        <h3>Patterns you'd never notice</h3>
+                        <p>PrimeState analyzes correlations across days, not just hours. That afternoon slump might trace back to dinner two nights ago.</p>
+                        <p>When a pattern is confirmed, you'll see exactly how strong the effect is — with real numbers from your own data.</p>
+                    </div>
+                    <div class="feature-example reveal reveal-delay-1">
+                        <div class="example-label">
+                            Confirmed Pattern
+                            <span class="live-indicator"><span class="live-dot"></span>Live</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-metric">Morning activity days</span>
+                            <span class="example-value">+<span class="counter" data-target="2.5" data-decimals="1">0</span> energy</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-metric">Late caffeine</span>
+                            <span class="example-value negative">-<span class="counter" data-target="1.2" data-decimals="1">0</span> clarity (next day)</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-metric">Breakfast vs skipping</span>
+                            <span class="example-value">+<span class="counter" data-target="1.8" data-decimals="1">0</span> focus</span>
+                        </div>
+                        <div class="insight-box">
+                            <span style="position: relative; z-index: 1;">Your data shows breakfast helps your morning focus. <strong><span class="counter" data-target="87" data-decimals="0">0</span>% confidence.</strong></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-row">
+                    <div class="feature-example reveal">
+                        <div class="example-label">
+                            Caffeine Tracking
+                            <span class="live-indicator"><span class="live-dot"></span>Live</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-metric">Current level</span>
+                            <span class="example-value"><span class="counter" data-target="47" data-decimals="0">0</span>mg in system</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-metric">Clear by</span>
+                            <span class="example-value">6:30 pm</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-metric">At bedtime</span>
+                            <span class="example-value">0mg</span>
+                        </div>
+                        <div class="data-stream">
+                            <span style="animation-delay: 0s;">caffeine.metabolize()</span>
+                            <span style="animation-delay: 2s;">sleep.predict()</span>
+                            <span style="animation-delay: 4s;">pattern.analyze()</span>
+                            <span style="animation-delay: 6s;">insight.generate()</span>
+                        </div>
+                    </div>
+                    <div class="feature-text reveal reveal-delay-1">
+                        <h3>Caffeine metabolism, personalized</h3>
+                        <p>See exactly how much caffeine is in your system and when it'll clear. The app learns your metabolism rate over time.</p>
+                        <p>Know before you drink whether that afternoon coffee will affect your sleep.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-box reveal" id="ctaBox">
+                    <div class="terminal-output">
+                        <div class="terminal-line" data-delay="0"><span class="prompt">></span> initializing primestate<span class="loading">...</span></div>
+                        <div class="terminal-line" data-delay="500"><span class="prompt">></span> loading cognitive models<span class="loading">...</span></div>
+                        <div class="terminal-line" data-delay="1000"><span class="prompt">></span> calibrating to your patterns<span class="loading">...</span></div>
+                        <div class="terminal-line" data-delay="1500"><span class="prompt">></span> <span class="success">ready_</span></div>
+                    </div>
+                    <h2>Start understanding your brain</h2>
+                    <p>Free to download. Your data stays on your device.</p>
+                    <a href="https://apps.apple.com/ca/app/primestate/id6757972046" class="cta-button">Get PrimeState</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>2026 PrimeState &nbsp;·&nbsp; <a href="/privacy/">Privacy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a> &nbsp;·&nbsp; <a href="mailto:support@primestate.dev">Contact</a></p>
+        </div>
+    </footer>
+    
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        const particleTexts = ['+1.2', '-0.5', '+2.1', '87%', '+0.8', '92%', '-1.1', '+1.5', '78%', '+0.3'];
+        
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.textContent = particleTexts[Math.floor(Math.random() * particleTexts.length)];
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Glow cursor
+        const glowCursor = document.getElementById('glowCursor');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let cursorX = mouseX;
+        let cursorY = mouseY;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateCursor() {
+            const dx = mouseX - cursorX;
+            const dy = mouseY - cursorY;
+            cursorX += dx * 0.08;
+            cursorY += dy * 0.08;
+            glowCursor.style.left = cursorX + 'px';
+            glowCursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        
+        // Scroll progress
+        const scrollProgress = document.getElementById('scrollProgress');
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollTop / docHeight;
+            scrollProgress.style.transform = `scaleX(${scrollPercent})`;
+            
+            // Header shrink
+            if (scrollTop > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Intersection Observer for reveal animations
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -80px 0px'
+        };
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Add visible class to h1 for underline animation
+                    if (entry.target.id === 'heroTitle') {
+                        entry.target.classList.add('visible');
+                    }
+                    
+                    // Trigger counter animation
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        if (!counter.dataset.animated) {
+                            counter.dataset.animated = 'true';
+                            animateCounter(counter);
+                        }
+                    });
+                    
+                    // Trigger terminal animation
+                    if (entry.target.id === 'ctaBox') {
+                        animateTerminal();
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+        
+        // Counter animation - SLOWER
+        function animateCounter(counter) {
+            const target = parseFloat(counter.dataset.target);
+            const decimals = parseInt(counter.dataset.decimals) || 0;
+            const duration = 2500; // Slower
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 4); // Smoother easing
+                const current = target * easeOut;
+                
+                counter.textContent = current.toFixed(decimals);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        // Terminal animation - SLOWER
+        function animateTerminal() {
+            const lines = document.querySelectorAll('.terminal-line');
+            lines.forEach(line => {
+                const delay = parseInt(line.dataset.delay) || 0;
+                setTimeout(() => {
+                    line.classList.add('visible');
+                }, delay);
+            });
+        }
+        
+        // Loading dots animation
+        const loadingDots = document.querySelectorAll('.loading');
+        let dotCount = 0;
+        setInterval(() => {
+            dotCount = (dotCount + 1) % 4;
+            loadingDots.forEach(el => {
+                el.textContent = '.'.repeat(dotCount || 1) + ' '.repeat(3 - (dotCount || 1));
+            });
+        }, 400);
+        
+        // Trigger hero animations on load
+        setTimeout(() => {
+            document.querySelectorAll('.hero .reveal').forEach(el => {
+                el.classList.add('visible');
+            });
+            document.getElementById('heroTitle').classList.add('visible');
+        }, 200);
+    </script>
+</body>
+</html>
