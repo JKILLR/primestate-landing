@@ -89,8 +89,8 @@ nav .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(--ac
 .pin-section::after {
   content: '';
   position: absolute; bottom: 0; left: 0; right: 0;
-  height: 280px;
-  background: linear-gradient(to bottom, var(--bg) 0%, rgba(9,9,11,0.85) 30%, rgba(9,9,11,0.4) 65%, transparent 100%);
+  height: 320px;
+  background: linear-gradient(to bottom, var(--bg) 0%, rgba(9,9,11,0.95) 40%, rgba(9,9,11,0.7) 70%, rgba(9,9,11,0.3) 90%, transparent 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -439,7 +439,7 @@ footer {
     <div class="section-label pin-item" id="sys-label">The App Incubator</div>
     <h2 class="system-headline pin-item" id="sys-head">Approve the architecture.<br>Go to sleep.<br><span style="color:var(--accent)">Wake up to an app.</span></h2>
     <p class="pin-item" id="sys-desc" style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; max-width: 560px; margin-bottom: 24px; opacity:0; transform:translateY(30px);">The App Incubator is a 9-stage pipeline. You make decisions in the first four stages. Then the AI builds autonomously — with quality gates after every phase.</p>
-    <div class="pin-item" id="sys-pipe" style="display:flex; flex-direction:column; gap:0; width:100%; max-width:680px;">
+    <div class="pin-item" id="sys-pipe" style="display:flex; flex-direction:column; gap:0; width:100%; max-width:680px; position:relative; background:linear-gradient(180deg, transparent 0%, rgba(9,9,11,0.92) 8%, rgba(9,9,11,0.96) 100%); border-radius:16px; padding:20px 24px 24px; margin-left:-24px;">
       <!-- YOU + AI section -->
       <div style="display:flex; flex-direction:column; gap:0;">
         <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:16px;">You + AI</div>
