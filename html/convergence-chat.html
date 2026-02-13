@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axel Command</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-mono: 'JetBrains Mono', monospace;
+      --bg-primary: #101012;
+      --bg-card: #1A1A1C;
+      --bg-elevated: #212124;
+      --bg-hover: #2A2A2D;
+      --text-primary: #FAFAFA;
+      --text-secondary: #A1A1AA;
+      --text-muted: #71717A;
+      --text-dim: #52525B;
+      --accent: #9AEF8C;
+      --accent-dim: rgba(154, 239, 140, 0.15);
+      --accent-subtle: rgba(154, 239, 140, 0.08);
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-muted: rgba(255, 255, 255, 0.12);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-mono);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .app::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(154, 239, 140, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(154, 239, 140, 0.015) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Nav sidebar */
+    .nav-sidebar {
+      width: 56px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--bg-primary);
+      margin-bottom: 16px;
+    }
+
+    .nav-item {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      margin-bottom: 4px;
+      color: var(--text-muted);
+      background: transparent;
+    }
+
+    .nav-item.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .nav-item svg { width: 18px; height: 18px; }
+    .nav-spacer { flex: 1; }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .page-header {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .page-header h1 { font-size: 14px; font-weight: 600; }
+
+    /* Chat layout */
+    .chat-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Sessions sidebar */
+    .sessions-sidebar {
+      width: 220px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sessions-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .sessions-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .session-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      margin-bottom: 2px;
+    }
+
+    .session-item.active { background: var(--accent-dim); }
+
+    .session-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 11px;
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .session-item.active .session-icon {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .session-info { flex: 1; min-width: 0; }
+    .session-name { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .session-meta { font-size: 10px; color: var(--text-dim); }
+
+    .session-status {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .session-status.active { background: var(--accent); }
+    .session-status.idle { background: var(--text-dim); }
+
+    /* Chat area */
+    .chat-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .chat-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-header-status {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .message { margin-bottom: 20px; max-width: 100%; }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .message-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .message-avatar.axel { background: var(--accent-dim); color: var(--accent); }
+    .message-avatar.agent { background: var(--bg-elevated); color: var(--text-muted); border: 1px solid var(--border-muted); }
+    .message-avatar.agent.dead { opacity: 0.4; }
+
+    .message-sender { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+    .message-sender.axel { color: var(--accent); }
+    .message-time { font-size: 10px; color: var(--text-dim); }
+
+    .message-content { font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
+
+    /* Tool calls */
+    .tool-call {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin: 8px 0;
+      font-size: 11px;
+    }
+
+    .tool-call-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+    }
+
+    .tool-call-header svg { width: 14px; height: 14px; }
+    .tool-call-result { color: var(--text-muted); margin-top: 4px; font-size: 10px; }
+    .tool-call-result.success { color: var(--accent); }
+
+    /* Agent grid */
+    .agents-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .agent-badge {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-muted);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .agent-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .agent-badge.dead {
+      opacity: 0.3;
+      text-decoration: line-through;
+    }
+
+    .agent-badge.dead .dot { background: var(--error); }
+
+    /* Critique block */
+    .critique-block {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 11px;
+    }
+
+    .critique-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--error);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 10px;
+    }
+
+    .critique-line {
+      display: flex;
+      gap: 8px;
+      padding: 4px 0;
+      color: var(--text-muted);
+    }
+
+    .critique-line .from { color: var(--accent); font-weight: 600; }
+    .critique-line .arrow { color: var(--text-dim); }
+    .critique-line .to { color: var(--error); }
+
+    /* Convergence indicator */
+    .convergence-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-md);
+    }
+
+    .convergence-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .convergence-arrow { color: var(--text-dim); font-size: 16px; }
+    .convergence-label { font-size: 11px; color: var(--text-muted); }
+
+    /* Final result */
+    .final-result {
+      background: linear-gradient(135deg, rgba(154, 239, 140, 0.1) 0%, rgba(154, 239, 140, 0.02) 100%);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .final-result-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .insights-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .insight-item {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .insight-label { font-size: 10px; font-weight: 600; color: var(--accent); }
+    .insight-desc { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+    .novel-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg-primary);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      margin-top: 12px;
+    }
+
+    /* Context sidebar */
+    .context-sidebar {
+      width: 240px;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-subtle);
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .context-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .progress-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 0;
+    }
+
+    .progress-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 9px;
+    }
+    .progress-check.done { background: var(--accent); color: var(--bg-primary); }
+    .progress-check.active { background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); }
+
+    .progress-text { font-size: 11px; line-height: 1.4; }
+    .progress-text.done { color: var(--text-muted); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .stat-box {
+      background: var(--bg-elevated);
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+
+    .stat-value { font-size: 18px; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+  </style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Nav sidebar -->
+    <div class="nav-sidebar">
+      <div class="nav-brand">A</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Chat</h1>
+      </div>
+
+      <div class="chat-layout">
+        <!-- Sessions sidebar -->
+        <div class="sessions-sidebar">
+          <div class="sessions-header">Sessions</div>
+          <div class="sessions-list">
+            <div class="session-item active">
+              <div class="session-icon">C</div>
+              <div class="session-info">
+                <div class="session-name">X Algorithm Research</div>
+                <div class="session-meta">Convergence run</div>
+              </div>
+              <div class="session-status active"></div>
+            </div>
+            <div class="session-item">
+              <div class="session-icon">S</div>
+              <div class="session-info">
+                <div class="session-name">Scout</div>
+                <div class="session-meta">Idle</div>
+              </div>
+              <div class="session-status idle"></div>
+            </div>
+            <div class="session-item">
+              <div class="session-icon">E</div>
+              <div class="session-info">
+                <div class="session-name">Edge</div>
+                <div class="session-meta">Idle</div>
+              </div>
+              <div class="session-status idle"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat main -->
+        <div class="chat-main">
+          <div class="chat-header">
+            <div class="chat-header-status"></div>
+            X Algorithm Research — Parallel Convergence
+          </div>
+
+          <div class="chat-messages">
+            <!-- Spawn message -->
+            <div class="message">
+              <div class="message-header">
+                <div class="message-avatar axel">A</div>
+                <span class="message-sender axel">Axel</span>
+                <span class="message-time">14:32</span>
+              </div>
+              <div class="message-content">
+                Initiating parallel agent convergence. Spawning 6 independent research agents.
+              </div>
+              <div class="tool-call">
+                <div class="tool-call-header">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                  sessions_spawn x6
+                </div>
+                <div class="tool-call-result success">Spawned agents A1, A2, A3, A4, A5, A6</div>
+              </div>
+              <div class="agents-grid">
+                <div class="agent-badge"><span class="dot"></span> A1</div>
+                <div class="agent-badge"><span class="dot"></span> A2</div>
+                <div class="agent-badge"><span class="dot"></span> A3</div>
+                <div class="agent-badge"><span class="dot"></span> A4</div>
+                <div class="agent-badge"><span class="dot"></span> A5</div>
+                <div class="agent-badge"><span class="dot"></span> A6</div>
+              </div>
+              <div class="message-content" style="margin-top: 8px; font-style: italic; color: var(--text-dim);">
+                Prompt: "Analyze the X algorithm at the code level. Find hidden mechanics no one talks about. Discover non-obvious strategies that guarantee viral reach."
+              </div>
+            </div>
+
+            <!-- Research complete -->
+            <div class="message">
+              <div class="message-header">
+                <div class="message-avatar axel">A</div>
+                <span class="message-sender axel">Axel</span>
+                <span class="message-time">14:47</span>
+              </div>
+              <div class="message-content">
+                Phase 1 complete. 6 independent research documents generated. Initiating adversarial critique.
+              </div>
+            </div>
+
+            <!-- Critique phase -->
+            <div class="message">
+              <div class="message-header">
+                <div class="message-avatar agent">A1</div>
+                <span class="message-sender">Agent A1</span>
+                <span class="message-time">14:48</span>
+              </div>
+              <div class="critique-block">
+                <div class="critique-header">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  CRITIQUE
+                </div>
+                <div class="critique-line">
+                  <span class="from">A1</span>
+                  <span class="arrow">-></span>
+                  <span class="to">A3</span>
+                  "Your velocity window analysis uses 2024 data. Algorithm changed."
+                </div>
+                <div class="critique-line">
+                  <span class="from">A4</span>
+                  <span class="arrow">-></span>
+                  <span class="to">A2</span>
+                  "You missed TweepCred entirely. It's in the codebase."
+                </div>
+                <div class="critique-line">
+                  <span class="from">A6</span>
+                  <span class="arrow">-></span>
+                  <span class="to">A5</span>
+                  "Bookmark multiplier is 20x, not 4x. Check RelevanceScorer.java"
+                </div>
+              </div>
+            </div>
+
+            <!-- First convergence -->
+            <div class="message">
+              <div class="message-header">
+                <div class="message-avatar axel">A</div>
+                <span class="message-sender axel">Axel</span>
+                <span class="message-time">14:56</span>
+              </div>
+              <div class="message-content">
+                Weak documents eliminated. Survivors proceeding to deep expansion.
+              </div>
+              <div class="convergence-indicator">
+                <span class="convergence-num">6</span>
+                <span class="convergence-arrow">-></span>
+                <span class="convergence-num">3</span>
+                <span class="convergence-label">documents survive</span>
+              </div>
+              <div class="agents-grid">
+                <div class="agent-badge dead"><span class="dot"></span> A1</div>
+                <div class="agent-badge"><span class="dot"></span> A2</div>
+                <div class="agent-badge dead"><span class="dot"></span> A3</div>
+                <div class="agent-badge"><span class="dot"></span> A4</div>
+                <div class="agent-badge dead"><span class="dot"></span> A5</div>
+                <div class="agent-badge"><span class="dot"></span> A6</div>
+              </div>
+            </div>
+
+            <!-- Final convergence -->
+            <div class="message">
+              <div class="message-header">
+                <div class="message-avatar axel">A</div>
+                <span class="message-sender axel">Axel</span>
+                <span class="message-time">15:12</span>
+              </div>
+              <div class="message-content">
+                Final critique cycle complete. Single document emerged.
+              </div>
+              <div class="convergence-indicator">
+                <span class="convergence-num">3</span>
+                <span class="convergence-arrow">-></span>
+                <span class="convergence-num">1</span>
+                <span class="convergence-label">final output</span>
+              </div>
+            </div>
+
+            <!-- Final result -->
+            <div class="message">
+              <div class="message-header">
+                <div class="message-avatar axel">A</div>
+                <span class="message-sender axel">Axel</span>
+                <span class="message-time">15:13</span>
+              </div>
+              <div class="final-result">
+                <div class="final-result-header">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  X Viral Growth Playbook v2.0
+                </div>
+                <div class="insights-list">
+                  <div class="insight-item">
+                    <div class="insight-label">TweepCred</div>
+                    <div class="insight-desc">Hidden score 0-100. Below 65 = reach gated.</div>
+                  </div>
+                  <div class="insight-item">
+                    <div class="insight-label">15-Min Velocity</div>
+                    <div class="insight-desc">5 engagements in 10 min = 10-100x reach.</div>
+                  </div>
+                  <div class="insight-item">
+                    <div class="insight-label">Grok Sentiment</div>
+                    <div class="insight-desc">Every post scored -1 to +1. Negative = suppressed.</div>
+                  </div>
+                  <div class="insight-item">
+                    <div class="insight-label">Bookmark = 20x Like</div>
+                    <div class="insight-desc">Save intent weighted heavily over approval.</div>
+                  </div>
+                </div>
+                <div class="novel-tag">NOVEL INSIGHTS - NOT IN ANY ORIGINAL DOCUMENT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Context sidebar -->
+        <div class="context-sidebar">
+          <div class="context-title">Convergence Progress</div>
+          <div class="progress-item">
+            <div class="progress-check done">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="progress-text done">Spawn 6 agents</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-check done">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="progress-text done">Independent research</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-check done">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="progress-text done">Adversarial critique</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-check done">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="progress-text done">6 -> 3 convergence</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-check done">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="progress-text done">Deep expansion</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-check done">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="progress-text done">Final convergence</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-value">6</div>
+              <div class="stat-label">Agents</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Survivors</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">41m</div>
+              <div class="stat-label">Runtime</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">4</div>
+              <div class="stat-label">Novel Insights</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

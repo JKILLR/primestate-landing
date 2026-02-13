@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The X Viral Growth Playbook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0A0A0C;
+            --bg-card: #111114;
+            --bg-elevated: #18181C;
+            --bg-code: #1A1A1F;
+            --text: #EDEDF0;
+            --text-dim: #A0A0AA;
+            --text-muted: #66666F;
+            --accent: #9AEF8C;
+            --accent-20: rgba(154,239,140,0.20);
+            --accent-10: rgba(154,239,140,0.10);
+            --amber: #F59E0B;
+            --red: #EF4444;
+            --cyan: #22D3EE;
+            --border: rgba(255,255,255,0.08);
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', -apple-system, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        .page { display: flex; min-height: 100vh; }
+
+        /* Sidebar TOC */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 32px 20px;
+            border-right: 1px solid var(--border);
+            background: var(--bg);
+            z-index: 10;
+        }
+        .sidebar-title {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .toc a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 1.4;
+            padding: 5px 0 5px 0;
+            transition: color 0.2s;
+        }
+        .toc a:hover, .toc a.active { color: var(--accent); }
+        .toc a.toc-h1 { font-weight: 600; color: var(--text-dim); margin-top: 16px; font-size: 14px; }
+        .toc a.toc-h2 { padding-left: 12px; }
+        .toc a.toc-h3 { padding-left: 24px; font-size: 12px; }
+
+        /* Main content */
+        .main {
+            margin-left: 280px;
+            flex: 1;
+            max-width: 800px;
+            padding: 48px 48px 120px;
+        }
+
+        /* Download bar */
+        .download-bar {
+            position: fixed;
+            top: 0; left: 280px; right: 0;
+            background: rgba(10,10,12,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 5;
+        }
+        .download-bar span {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .download-btn {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--bg);
+            background: var(--accent);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .download-btn:hover { opacity: 0.85; }
+
+        /* Typography */
+        .content { margin-top: 32px; }
+
+        .content h1 {
+            font-family: var(--mono);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 64px 0 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent-20);
+            line-height: 1.2;
+        }
+        .content h1:first-child { margin-top: 0; }
+
+        .content h2 {
+            font-family: var(--mono);
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 48px 0 12px;
+            line-height: 1.3;
+        }
+
+        .content h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 32px 0 8px;
+            line-height: 1.4;
+        }
+
+        .content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin: 24px 0 8px;
+        }
+
+        .content p { margin: 12px 0; color: var(--text-dim); }
+        .content strong { color: var(--text); font-weight: 600; }
+
+        .content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-20);
+            transition: border-color 0.2s;
+        }
+        .content a:hover { border-color: var(--accent); }
+
+        .content ul, .content ol {
+            margin: 12px 0;
+            padding-left: 24px;
+            color: var(--text-dim);
+        }
+        .content li { margin: 6px 0; }
+        .content li strong { color: var(--text); }
+
+        /* Tables */
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .content thead th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg-elevated);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        .content td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-dim);
+            vertical-align: top;
+        }
+        .content tr:hover td { background: var(--accent-10); }
+
+        /* Code */
+        .content code {
+            font-family: var(--mono);
+            font-size: 14px;
+            background: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+        .content pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .content pre code {
+            background: none;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-dim);
+        }
+
+        /* Blockquotes / callouts */
+        .content blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 12px 20px;
+            margin: 16px 0;
+            background: var(--accent-10);
+            border-radius: 0 8px 8px 0;
+        }
+        .content blockquote p { color: var(--text); margin: 4px 0; }
+
+        /* Horizontal rules */
+        .content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        /* Checklists */
+        .content input[type="checkbox"] {
+            accent-color: var(--accent);
+            margin-right: 6px;
+        }
+
+        /* Warning/emphasis markers */
+        .content em { color: var(--text-muted); font-style: italic; }
+
+        /* Scroll active tracking */
+        .toc a.active {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 24px 20px 80px; }
+            .download-bar { left: 0; padding: 12px 20px; }
+            .content h1 { font-size: 24px; }
+            .content h2 { font-size: 19px; }
+            .content table { font-size: 13px; }
+            .content td, .content thead th { padding: 8px 10px; }
+        }
+    </style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+    <div class="page">
+        <nav class="sidebar">
+            <div class="sidebar-title">Table of Contents</div>
+            <div class="toc" id="toc"></div>
+        </nav>
+        <div class="download-bar">
+            <span>The X Viral Growth Playbook</span>
+            <a href="/x-viral-growth-playbook.md" download class="download-btn">Download .md</a>
+        </div>
+        <main class="main">
+            <div class="content" id="content">
+                <p style="color:var(--text-muted);font-family:var(--mono);font-size:13px;">Loading...</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        async function init() {
+            const res = await fetch('/x-viral-growth-playbook.md');
+            const md = await res.text();
+
+            marked.setOptions({
+                gfm: true,
+                breaks: false,
+                headerIds: true,
+                mangle: false
+            });
+
+            const html = marked.parse(md);
+            document.getElementById('content').innerHTML = html;
+
+            // Build TOC from rendered headings
+            const toc = document.getElementById('toc');
+            const headings = document.querySelectorAll('.content h1, .content h2, .content h3');
+            headings.forEach((h, i) => {
+                if (!h.id) h.id = 'section-' + i;
+                const a = document.createElement('a');
+                a.href = '#' + h.id;
+                a.textContent = h.textContent;
+                a.className = 'toc-' + h.tagName.toLowerCase();
+                toc.appendChild(a);
+            });
+
+            // Active heading tracking
+            const tocLinks = toc.querySelectorAll('a');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        tocLinks.forEach(l => l.classList.remove('active'));
+                        const link = toc.querySelector(`a[href="#${entry.target.id}"]`);
+                        if (link) link.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-80px 0px -70% 0px' });
+
+            headings.forEach(h => observer.observe(h));
+        }
+        init();
+    </script>
+</body>
+</html>

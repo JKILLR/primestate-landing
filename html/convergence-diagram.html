@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, height=675">
+  <title>Parallel Agent Convergence</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 1200px;
+      height: 675px;
+      overflow: hidden;
+    }
+
+    body {
+      background: #101012;
+      color: #e4e4e7;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 24px 32px;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      background: #1A1A1C;
+      border: 1px solid rgba(154, 239, 140, 0.2);
+      border-radius: 16px;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(154, 239, 140, 0.15);
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #9AEF8C;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .header .subtitle {
+      font-size: 11px;
+      color: #71717a;
+    }
+
+    /* Main content - horizontal flow */
+    .flow {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      flex: 1;
+      gap: 12px;
+    }
+
+    /* Phase styling */
+    .phase {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #212124;
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+    }
+
+    .phase-label {
+      font-size: 8px;
+      font-weight: 600;
+      color: #9AEF8C;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .phase-label::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: #9AEF8C;
+      border-radius: 50%;
+    }
+
+    .phase-num {
+      font-size: 28px;
+      font-weight: 700;
+      color: rgba(154, 239, 140, 0.12);
+      position: absolute;
+      top: 6px;
+      right: 10px;
+    }
+
+    /* Agent nodes */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 6px 0;
+    }
+
+    .agent-node {
+      height: 38px;
+      background: #1A1A1C;
+      border: 1px solid rgba(154, 239, 140, 0.3);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: #9AEF8C;
+      position: relative;
+    }
+
+    .agent-node.active {
+      border-color: #9AEF8C;
+      box-shadow: 0 0 10px rgba(154, 239, 140, 0.12);
+    }
+
+    .agent-node.dead {
+      opacity: 0.25;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #52525b;
+    }
+
+    .agent-node .status {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 7px;
+      height: 7px;
+      background: #9AEF8C;
+      border-radius: 50%;
+      border: 2px solid #212124;
+    }
+
+    .agent-node.dead .status {
+      background: #ef4444;
+    }
+
+    .phase-desc {
+      font-size: 9px;
+      color: #71717a;
+      text-align: center;
+      margin-top: auto;
+      line-height: 1.4;
+    }
+
+    /* Arrow connector between phases */
+    .arrow-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(154, 239, 140, 0.4);
+      flex-shrink: 0;
+      width: 20px;
+    }
+
+    .arrow-right svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Critique box */
+    .critique-lines {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 8px;
+    }
+
+    .critique-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #71717a;
+      background: #1A1A1C;
+      padding: 5px 7px;
+      border-radius: 4px;
+    }
+
+    .critique-line .from {
+      color: #9AEF8C;
+      font-weight: 600;
+    }
+
+    .critique-line .arrow {
+      color: #52525b;
+    }
+
+    .critique-line .to {
+      color: #ef4444;
+    }
+
+    /* Convergence numbers */
+    .convergence {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 0;
+      font-size: 9px;
+      color: #71717a;
+    }
+
+    .convergence .num {
+      font-size: 18px;
+      font-weight: 700;
+      color: #9AEF8C;
+    }
+
+    /* Final output */
+    .final-phase {
+      background: linear-gradient(135deg, rgba(154, 239, 140, 0.1) 0%, rgba(154, 239, 140, 0.02) 100%);
+      border: 2px solid #9AEF8C;
+    }
+
+    .final-phase h3 {
+      font-size: 11px;
+      font-weight: 600;
+      color: #e4e4e7;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .insight-item {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px;
+      border-radius: 4px;
+      font-size: 8px;
+    }
+
+    .insight-item .label {
+      color: #9AEF8C;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .insight-item .desc {
+      color: #71717a;
+      font-size: 7px;
+    }
+
+    .novel-badge {
+      display: block;
+      background: #9AEF8C;
+      color: #101012;
+      font-size: 7px;
+      font-weight: 700;
+      padding: 4px 6px;
+      border-radius: 3px;
+      margin-top: 10px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(154, 239, 140, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #52525b;
+    }
+
+    .footer .handle {
+      color: #9AEF8C;
+    }
+  </style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Parallel Agent Convergence</h1>
+      <div class="subtitle">Natural selection for ideas</div>
+    </div>
+
+    <div class="flow">
+      <!-- Phase 1: Spawn -->
+      <div class="phase">
+        <div class="phase-num">1</div>
+        <div class="phase-label">Independent Research</div>
+        <div class="agents-grid">
+          <div class="agent-node active">A1<span class="status"></span></div>
+          <div class="agent-node active">A2<span class="status"></span></div>
+          <div class="agent-node active">A3<span class="status"></span></div>
+          <div class="agent-node active">A4<span class="status"></span></div>
+          <div class="agent-node active">A5<span class="status"></span></div>
+          <div class="agent-node active">A6<span class="status"></span></div>
+        </div>
+        <div class="phase-desc">Same prompt<br/>6 independent outputs</div>
+      </div>
+
+      <div class="arrow-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- Phase 2: Critique -->
+      <div class="phase">
+        <div class="phase-num">2</div>
+        <div class="phase-label">Adversarial Critique</div>
+        <div class="critique-lines">
+          <div class="critique-line">
+            <span class="from">A1</span>
+            <span class="arrow">-></span>
+            <span class="to">A3</span>
+            <span style="margin-left: 4px; color: #52525b;">outdated data</span>
+          </div>
+          <div class="critique-line">
+            <span class="from">A4</span>
+            <span class="arrow">-></span>
+            <span class="to">A2</span>
+            <span style="margin-left: 4px; color: #52525b;">missed TweepCred</span>
+          </div>
+          <div class="critique-line">
+            <span class="from">A6</span>
+            <span class="arrow">-></span>
+            <span class="to">A5</span>
+            <span style="margin-left: 4px; color: #52525b;">wrong multiplier</span>
+          </div>
+        </div>
+        <div class="convergence">
+          <span class="num">6</span>
+          <span class="arrow">-></span>
+          <span class="num">3</span>
+          <span>survive</span>
+        </div>
+      </div>
+
+      <div class="arrow-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- Phase 3: Expand -->
+      <div class="phase">
+        <div class="phase-num">3</div>
+        <div class="phase-label">Deep Expansion</div>
+        <div class="agents-grid">
+          <div class="agent-node dead">A1<span class="status"></span></div>
+          <div class="agent-node active">A2<span class="status"></span></div>
+          <div class="agent-node dead">A3<span class="status"></span></div>
+          <div class="agent-node active">A4<span class="status"></span></div>
+          <div class="agent-node dead">A5<span class="status"></span></div>
+          <div class="agent-node active">A6<span class="status"></span></div>
+        </div>
+        <div class="phase-desc">Survivors expand<br/>with new research</div>
+      </div>
+
+      <div class="arrow-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- Phase 4: Final Critique -->
+      <div class="phase">
+        <div class="phase-num">4</div>
+        <div class="phase-label">Final Synthesis</div>
+        <div class="critique-lines">
+          <div class="critique-line" style="justify-content: center;">
+            <span class="from">A2</span>
+            <span class="arrow" style="color: #9AEF8C;">+</span>
+            <span class="from">A4</span>
+            <span class="arrow" style="color: #9AEF8C;">+</span>
+            <span class="from">A6</span>
+          </div>
+        </div>
+        <div style="text-align: center; font-size: 8px; color: #71717a; margin-top: 6px;">Cross-validate findings</div>
+        <div class="convergence">
+          <span class="num">3</span>
+          <span class="arrow">-></span>
+          <span class="num">1</span>
+          <span>final</span>
+        </div>
+      </div>
+
+      <div class="arrow-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- Final Output -->
+      <div class="phase final-phase">
+        <div class="phase-label">Output</div>
+        <h3>Novel Insights</h3>
+        <div class="insights-grid">
+          <div class="insight-item">
+            <div class="label">TweepCred</div>
+            <div class="desc">Hidden score 0-100</div>
+          </div>
+          <div class="insight-item">
+            <div class="label">15-Min Velocity</div>
+            <div class="desc">10-100x multiplier</div>
+          </div>
+          <div class="insight-item">
+            <div class="label">Grok Sentiment</div>
+            <div class="desc">Every post scored</div>
+          </div>
+          <div class="insight-item">
+            <div class="label">Bookmark = 20x</div>
+            <div class="desc">Save > approval</div>
+          </div>
+        </div>
+        <div class="novel-badge">NOT IN ANY ORIGINAL DOC</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>@Inner_Axiom</span>
+      <span class="handle">parallel agent convergence</span>
+    </div>
+  </div>
+</body>
+</html>

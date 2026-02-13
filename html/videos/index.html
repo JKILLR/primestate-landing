@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Engine — Test Renders</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #fff; font-family: -apple-system, system-ui, sans-serif; padding: 40px 20px; }
+  h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+  .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; }
+  .card { background: #141418; border-radius: 12px; overflow: hidden; border: 1px solid #222; }
+  .card video { width: 100%; aspect-ratio: 9/16; object-fit: cover; background: #000; }
+  .card .info { padding: 16px; }
+  .card .theme { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .card .caption { font-size: 13px; color: #999; line-height: 1.4; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+  .tag.fire { background: rgba(255,69,58,0.2); color: #ff453a; }
+  .tag.ice { background: rgba(100,180,255,0.2); color: #64b4ff; }
+  .tag.gold { background: rgba(255,200,50,0.2); color: #ffc832; }
+  .tag.pure { background: rgba(255,255,255,0.15); color: #fff; }
+</style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+<h1>⚡ Video Engine — Test Renders</h1>
+<p class="subtitle">Faceless motivational short-form content • 1080×1920 • AI script + ElevenLabs voice</p>
+<div class="grid">
+  <div class="card">
+    <video controls preload="metadata" src="discipline_20260203_175055.mp4"></video>
+    <div class="info">
+      <div class="theme"><span class="tag fire">FIRE</span> Relentless Discipline</div>
+      <div class="caption">"Stop making excuses. It's time to lock in." — Charlie voice (deep, confident)</div>
+    </div>
+  </div>
+  <div class="card">
+    <video controls preload="metadata" src="allin_20260203_175404.mp4"></video>
+    <div class="info">
+      <div class="theme"><span class="tag gold">GOLD</span> All-or-Nothing Success</div>
+      <div class="caption">"You're not here to play it safe." — Liam voice (energetic)</div>
+    </div>
+  </div>
+  <div class="card">
+    <video controls preload="metadata" src="stoic_20260203_175434.mp4"></video>
+    <div class="info">
+      <div class="theme"><span class="tag ice">ICE</span> Stoic Wisdom</div>
+      <div class="caption">Ancient philosophy, modern application — George voice (British storyteller)</div>
+    </div>
+  </div>
+  <div class="card">
+    <video controls preload="metadata" src="emotional_20260203_175510.mp4"></video>
+    <div class="info">
+      <div class="theme"><span class="tag pure">PURE</span> Emotional Wake-Up Call</div>
+      <div class="caption">"What are you doing with your life right now?" — Eric voice (smooth, trustworthy)</div>
+    </div>
+  </div>
+  <div class="card">
+    <video controls preload="metadata" src="wealth_20260203_175547.mp4"></video>
+    <div class="info">
+      <div class="theme"><span class="tag gold">GOLD</span> Wealth & Success Mindset</div>
+      <div class="caption">"Nobody is coming to save you." — Roger voice (laid-back, resonant)</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

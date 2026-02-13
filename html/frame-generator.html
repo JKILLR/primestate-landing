@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PrimeState App Store Screenshot Generator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a2e; color: #e0e0e0; font-family: -apple-system, sans-serif; padding: 20px; }
+  h1 { color: #4ADE80; margin-bottom: 20px; font-size: 24px; }
+  .controls { background: #16213e; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+  .controls label { display: block; margin: 10px 0 5px; font-weight: 600; }
+  .controls input, .controls select, .controls textarea { 
+    width: 100%; padding: 8px 12px; background: #0f3460; border: 1px solid #333; 
+    color: #fff; border-radius: 6px; font-size: 14px; 
+  }
+  .controls textarea { height: 60px; resize: vertical; }
+  .btn { 
+    background: #4ADE80; color: #000; border: none; padding: 12px 24px; 
+    border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;
+    font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+    margin: 5px;
+  }
+  .btn:hover { background: #22c55e; }
+  .btn-secondary { background: #22D3EE; }
+  .preview { text-align: center; margin: 20px 0; }
+  .preview canvas { max-width: 400px; border: 1px solid #333; border-radius: 8px; }
+  .screenshots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .screenshot-card { background: #16213e; padding: 15px; border-radius: 12px; text-align: center; }
+  .screenshot-card h3 { color: #4ADE80; margin-bottom: 10px; }
+  .screenshot-card canvas { max-width: 100%; border-radius: 8px; }
+  #batch-section { margin-top: 30px; border-top: 2px solid #333; padding-top: 20px; }
+</style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+<h1>⚡ PrimeState — App Store Screenshot Generator</h1>
+
+<div class="controls">
+  <h2>Single Screenshot</h2>
+  <label>App Screenshot (PNG from device):</label>
+  <input type="file" id="imageInput" accept="image/*">
+  
+  <label>Headline Text:</label>
+  <input type="text" id="headline" value="Your Brain. Decoded." placeholder="Main headline">
+  
+  <label>Subhead Text (optional):</label>
+  <input type="text" id="subhead" value="AI-powered cognitive optimization" placeholder="Smaller text below">
+  
+  <label>Background Style:</label>
+  <select id="bgStyle">
+    <option value="dark-gradient">Dark Gradient (Brand)</option>
+    <option value="green-accent">Green Accent</option>
+    <option value="cyan-accent">Cyan Accent</option>
+    <option value="solid-dark">Solid Dark</option>
+  </select>
+  
+  <label>Device Size:</label>
+  <select id="deviceSize">
+    <option value="6.7">iPhone 6.7" (1290×2796)</option>
+    <option value="6.5">iPhone 6.5" (1284×2778)</option>
+  </select>
+  
+  <div style="margin-top: 15px;">
+    <button class="btn" onclick="generateSingle()">Generate Preview</button>
+    <button class="btn btn-secondary" onclick="downloadSingle()">Download</button>
+  </div>
+</div>
+
+<div class="preview">
+  <canvas id="previewCanvas"></canvas>
+</div>
+
+<div id="batch-section">
+  <h2 style="color: #4ADE80; margin-bottom: 15px;">Batch Generate (6 Screenshots)</h2>
+  <p style="margin-bottom: 15px; opacity: 0.7;">Select 6 screenshots below. Headlines are pre-filled for the optimal story flow.</p>
+  
+  <div id="batch-inputs"></div>
+  <button class="btn" onclick="generateBatch()" style="margin-top: 15px;">Generate All 6</button>
+  <button class="btn btn-secondary" onclick="downloadAll()" style="margin-top: 15px;">Download All</button>
+  
+  <div class="screenshots-grid" id="batch-output"></div>
+</div>
+
+<script>
+const SCREENSHOTS = [
+  { id: 1, headline: "Your Brain. Decoded.", subhead: "AI-powered cognitive performance tracking", bg: "dark-gradient" },
+  { id: 2, headline: "Just Talk. AI Logs It.", subhead: "Natural language logging in seconds", bg: "green-accent" },
+  { id: 3, headline: "Snap. Detect. Log.", subhead: "AI meal recognition — zero typing", bg: "cyan-accent" },
+  { id: 4, headline: "Scan Your Supplements", subhead: "Photo → name, dosage, one tap to log", bg: "dark-gradient" },
+  { id: 5, headline: "Discover What Works", subhead: "Statistically confirmed patterns, not guesses", bg: "green-accent" },
+  { id: 6, headline: "Your Patterns. Visualized.", subhead: "Focus, energy, clarity & sleep trends", bg: "cyan-accent" },
+];
+
+const SIZES = {
+  "6.7": { w: 1290, h: 2796 },
+  "6.5": { w: 1284, h: 2778 },
+};
+
+// Phone frame dimensions relative to canvas
+const PHONE_FRAME = {
+  topPadding: 0.32,    // headline area takes top 32%
+  phoneWidth: 0.72,     // phone takes 72% of width
+  phoneRadius: 0.03,    // corner radius relative to phone width
+  bottomPadding: 0.03,  // bottom margin
+};
+
+function getGradient(ctx, w, h, style) {
+  let grad;
+  switch(style) {
+    case "green-accent":
+      grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, "#0a0a0f");
+      grad.addColorStop(0.5, "#0d1a0d");
+      grad.addColorStop(1, "#0a0f0a");
+      return grad;
+    case "cyan-accent":
+      grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, "#0a0a0f");
+      grad.addColorStop(0.5, "#0a1519");
+      grad.addColorStop(1, "#0a0f0f");
+      return grad;
+    case "solid-dark":
+      return "#09090B";
+    default: // dark-gradient
+      grad = ctx.createLinearGradient(0, 0, w * 0.5, h);
+      grad.addColorStop(0, "#09090B");
+      grad.addColorStop(0.4, "#0f1419");
+      grad.addColorStop(1, "#09090B");
+      return grad;
+  }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function renderFrame(canvas, img, headline, subhead, bgStyle, sizeKey) {
+  const size = SIZES[sizeKey] || SIZES["6.7"];
+  const W = size.w;
+  const H = size.h;
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = getGradient(ctx, W, H, bgStyle);
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle glow behind phone
+  const glowGrad = ctx.createRadialGradient(W/2, H * 0.65, 0, W/2, H * 0.65, W * 0.5);
+  glowGrad.addColorStop(0, "rgba(74, 222, 128, 0.06)");
+  glowGrad.addColorStop(1, "rgba(74, 222, 128, 0)");
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Headline
+  const headlineY = H * 0.08;
+  ctx.textAlign = "center";
+  
+  // Main headline
+  const headSize = Math.round(W * 0.075);
+  ctx.font = `800 ${headSize}px -apple-system, 'SF Pro Display', sans-serif`;
+  ctx.fillStyle = "#FFFFFF";
+  
+  // Word wrap headline if needed
+  const words = headline.split(' ');
+  let lines = [];
+  let currentLine = '';
+  for (const word of words) {
+    const testLine = currentLine ? currentLine + ' ' + word : word;
+    if (ctx.measureText(testLine).width > W * 0.85) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+  }
+  lines.push(currentLine);
+  
+  let textY = headlineY;
+  for (const line of lines) {
+    ctx.fillText(line, W/2, textY + headSize);
+    textY += headSize * 1.15;
+  }
+
+  // Subhead
+  if (subhead) {
+    const subSize = Math.round(W * 0.035);
+    ctx.font = `400 ${subSize}px -apple-system, 'SF Pro Display', sans-serif`;
+    ctx.fillStyle = "rgba(255,255,255,0.6)";
+    ctx.fillText(subhead, W/2, textY + subSize + headSize * 0.3);
+  }
+
+  // Phone frame
+  if (img) {
+    const phoneW = W * PHONE_FRAME.phoneWidth;
+    const imgAspect = img.height / img.width;
+    const phoneH = phoneW * imgAspect;
+    const phoneX = (W - phoneW) / 2;
+    const phoneY = H - phoneH - (H * PHONE_FRAME.bottomPadding);
+    const radius = phoneW * PHONE_FRAME.phoneRadius;
+
+    // Phone shadow
+    ctx.shadowColor = "rgba(0,0,0,0.5)";
+    ctx.shadowBlur = 60;
+    ctx.shadowOffsetY = 20;
+
+    // Phone border
+    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.lineWidth = 3;
+    roundRect(ctx, phoneX - 2, phoneY - 2, phoneW + 4, phoneH + 4, radius + 2);
+    ctx.stroke();
+
+    // Clip to rounded rect and draw image
+    ctx.save();
+    roundRect(ctx, phoneX, phoneY, phoneW, phoneH, radius);
+    ctx.clip();
+    ctx.drawImage(img, phoneX, phoneY, phoneW, phoneH);
+    ctx.restore();
+
+    // Reset shadow
+    ctx.shadowColor = "transparent";
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+  }
+
+  return canvas;
+}
+
+// Single screenshot
+let currentImage = null;
+document.getElementById("imageInput").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => { currentImage = img; };
+  img.src = URL.createObjectURL(file);
+});
+
+function generateSingle() {
+  const canvas = document.getElementById("previewCanvas");
+  const headline = document.getElementById("headline").value;
+  const subhead = document.getElementById("subhead").value;
+  const bg = document.getElementById("bgStyle").value;
+  const size = document.getElementById("deviceSize").value;
+  renderFrame(canvas, currentImage, headline, subhead, bg, size);
+}
+
+function downloadSingle() {
+  const canvas = document.getElementById("previewCanvas");
+  if (!canvas.width) { alert("Generate first!"); return; }
+  const link = document.createElement("a");
+  link.download = "primestate-screenshot.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+// Batch setup
+const batchContainer = document.getElementById("batch-inputs");
+SCREENSHOTS.forEach((s, i) => {
+  const div = document.createElement("div");
+  div.style.cssText = "background:#0f3460;padding:12px;border-radius:8px;margin:8px 0;";
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <strong style="color:#4ADE80;min-width:30px;">#${s.id}</strong>
+      <input type="file" id="batch-file-${i}" accept="image/*" style="flex:1;min-width:200px;">
+      <input type="text" id="batch-head-${i}" value="${s.headline}" style="flex:1;min-width:200px;">
+      <input type="text" id="batch-sub-${i}" value="${s.subhead}" style="flex:1;min-width:200px;">
+    </div>
+  `;
+  batchContainer.appendChild(div);
+});
+
+const batchImages = new Array(6).fill(null);
+for (let i = 0; i < 6; i++) {
+  document.getElementById(`batch-file-${i}`).addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => { batchImages[i] = img; };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function generateBatch() {
+  const output = document.getElementById("batch-output");
+  output.innerHTML = "";
+  const size = document.getElementById("deviceSize").value;
+  
+  for (let i = 0; i < 6; i++) {
+    const headline = document.getElementById(`batch-head-${i}`).value;
+    const subhead = document.getElementById(`batch-sub-${i}`).value;
+    const bg = SCREENSHOTS[i].bg;
+    
+    const card = document.createElement("div");
+    card.className = "screenshot-card";
+    card.innerHTML = `<h3>#${i+1}: ${headline}</h3>`;
+    
+    const canvas = document.createElement("canvas");
+    canvas.id = `batch-canvas-${i}`;
+    renderFrame(canvas, batchImages[i], headline, subhead, bg, size);
+    card.appendChild(canvas);
+    output.appendChild(card);
+  }
+}
+
+function downloadAll() {
+  for (let i = 0; i < 6; i++) {
+    const canvas = document.getElementById(`batch-canvas-${i}`);
+    if (!canvas) continue;
+    const link = document.createElement("a");
+    link.download = `primestate-screenshot-${i+1}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }
+}
+</script>
+</body>
+</html>

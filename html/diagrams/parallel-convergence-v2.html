@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0c0c0c;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 48px;
+            display: flex;
+            justify-content: center;
+        }
+        .canvas {
+            width: 900px;
+            position: relative;
+        }
+        
+        /* Signature top bar */
+        .sig {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #222;
+        }
+        .sig-left {
+            color: #f4a261;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .sig-right {
+            color: #333;
+            font-size: 10px;
+        }
+        
+        /* Round containers */
+        .round {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .round-label {
+            width: 80px;
+            flex-shrink: 0;
+            padding-top: 20px;
+        }
+        .round-num {
+            color: #f4a261;
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 1;
+        }
+        .round-name {
+            color: #444;
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        .round-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        /* Agent nodes */
+        .agents {
+            display: flex;
+            gap: 8px;
+        }
+        .node {
+            width: 56px;
+            height: 56px;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            position: relative;
+        }
+        .node-alive {
+            border-color: #f4a261;
+            background: rgba(244, 162, 97, 0.08);
+        }
+        .node-dead {
+            border-color: #222;
+            background: #0c0c0c;
+        }
+        .node-dead::after {
+            content: '×';
+            color: #333;
+            font-size: 24px;
+        }
+        .node-final {
+            border-color: #f4a261;
+            background: rgba(244, 162, 97, 0.15);
+            border-width: 2px;
+        }
+        
+        /* Action descriptions */
+        .action {
+            color: #555;
+            font-size: 10px;
+            padding: 8px 0;
+            border-left: 2px solid #222;
+            padding-left: 12px;
+            margin-left: 4px;
+        }
+        .action em {
+            color: #f4a261;
+            font-style: normal;
+        }
+        
+        /* Connector lines */
+        .connector {
+            height: 32px;
+            margin-left: 80px;
+            border-left: 1px dashed #222;
+            position: relative;
+        }
+        .connector::after {
+            content: '↓';
+            position: absolute;
+            bottom: -8px;
+            left: -5px;
+            color: #333;
+            font-size: 12px;
+        }
+        
+        /* Final result */
+        .final-container {
+            margin-left: 80px;
+            margin-top: 16px;
+            padding: 24px;
+            border: 1px solid #f4a261;
+            background: linear-gradient(135deg, rgba(244,162,97,0.05) 0%, transparent 100%);
+        }
+        .final-label {
+            color: #f4a261;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .final-text {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .final-text strong {
+            color: #f4a261;
+            font-weight: 400;
+        }
+        
+        /* Bottom signature */
+        .footer {
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+        }
+        .footer-left {
+            color: #333;
+            font-size: 10px;
+        }
+        .footer-right {
+            color: #f4a261;
+            font-size: 10px;
+        }
+    </style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+    <div class="canvas">
+        <div class="sig">
+            <div class="sig-left">Parallel Agent Convergence</div>
+            <div class="sig-right">@Inner_Axiom</div>
+        </div>
+        
+        <!-- Round 0 -->
+        <div class="round">
+            <div class="round-label">
+                <div class="round-num">0</div>
+                <div class="round-name">Spawn</div>
+            </div>
+            <div class="round-content">
+                <div class="agents">
+                    <div class="node node-alive">A</div>
+                    <div class="node node-alive">B</div>
+                    <div class="node node-alive">C</div>
+                    <div class="node node-alive">D</div>
+                    <div class="node node-alive">E</div>
+                    <div class="node node-alive">F</div>
+                </div>
+                <div class="action">6 agents spawn → each explores <em>independently</em> → writes proposal</div>
+            </div>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <!-- Round 1 -->
+        <div class="round">
+            <div class="round-label">
+                <div class="round-num">1</div>
+                <div class="round-name">Critique</div>
+            </div>
+            <div class="round-content">
+                <div class="agents">
+                    <div class="node node-alive">A</div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-alive">C</div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-alive">E</div>
+                    <div class="node node-dead"></div>
+                </div>
+                <div class="action">Each reads others → writes <em>critique</em> → weak ideas die → 3 survive</div>
+            </div>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <!-- Round 2 -->
+        <div class="round">
+            <div class="round-label">
+                <div class="round-num">2</div>
+                <div class="round-name">Refine</div>
+            </div>
+            <div class="round-content">
+                <div class="agents">
+                    <div class="node node-alive">A</div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-alive">E</div>
+                    <div class="node node-dead"></div>
+                </div>
+                <div class="action">Survivors <em>absorb critiques</em> → evolve → strongest 2 remain</div>
+            </div>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <!-- Round 3 -->
+        <div class="round">
+            <div class="round-label">
+                <div class="round-num">3</div>
+                <div class="round-name">Merge</div>
+            </div>
+            <div class="round-content">
+                <div class="agents">
+                    <div class="node node-final">★</div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-dead"></div>
+                    <div class="node node-dead"></div>
+                </div>
+                <div class="action">Final synthesis → one document <em>survives</em></div>
+            </div>
+        </div>
+        
+        <div class="final-container">
+            <div class="final-label">Output</div>
+            <div class="final-text">
+                Contains ideas that were in <strong>none</strong> of the originals.<br>
+                Emergent intelligence from structured disagreement.
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-left">natural selection for thoughts</div>
+            <div class="footer-right">axobotl.md</div>
+        </div>
+    </div>
+</body>
+</html>

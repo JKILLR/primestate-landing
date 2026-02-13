@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Vibe-Coder Playbook — From Claude Code to the App Store</title>
+<meta name="description" content="The step-by-step guide to building and shipping your first app with AI. From idea to live on the App Store. By someone who actually did it.">
+<meta property="og:title" content="The Vibe-Coder Playbook">
+<meta property="og:description" content="From Claude Code to the App Store. Build and ship your first app with AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #09090B;
+  --bg-card: #111113;
+  --bg-card-hover: #18181B;
+  --text: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #52525B;
+  --accent: #2DD4BF;
+  --accent-dim: rgba(45,212,191,0.12);
+  --accent-glow: rgba(45,212,191,0.25);
+  --border: rgba(255,255,255,0.06);
+}
+html { scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Noise overlay for editorial texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+#progress { position: fixed; top: 0; left: 0; height: 1px; background: var(--accent); z-index: 1000; width: 0%; }
+
+/* NAV */
+nav {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+  display: flex; align-items: center; gap: 32px;
+  padding: 12px 28px;
+  background: rgba(9,9,11,0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: -0.5px; color: var(--text); }
+.logo span { color: var(--accent); }
+nav a { font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+nav a:hover { color: var(--text); }
+nav .nav-cta {
+  font-size: 13px; font-weight: 600; color: var(--bg);
+  background: var(--accent); padding: 8px 20px; border-radius: 100px;
+  text-decoration: none; transition: all 0.2s;
+  box-shadow: 0 1px 3px var(--accent-glow), 0 4px 12px rgba(45,212,191,0.15);
+}
+nav .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(--accent-glow), 0 8px 20px rgba(45,212,191,0.2); }
+
+/* DOT MESH CANVAS */
+.mesh-canvas {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 220px;
+  pointer-events: none;
+}
+
+/* PINNED SECTIONS */
+.pin-section {
+  height: 100vh; width: 100%; position: relative; overflow: hidden; z-index: 1;
+}
+.pin-content {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 220px;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  padding: 20vh 40px 20px; max-width: 1000px; margin: 0 auto; width: 100%;
+  z-index: 2;
+}
+.pin-item { opacity: 0; transform: translateY(30px); text-shadow: 0 0 40px var(--bg), 0 0 80px var(--bg); }
+.section-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 4px; color: var(--accent);
+  margin-bottom: 32px;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  position: relative; padding: 120px 40px 80px; text-align: center;
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 4px; color: var(--accent);
+  margin-bottom: 32px;
+}
+.hero h1 {
+  font-size: clamp(40px, 7vw, 96px); font-weight: 900; letter-spacing: -3px;
+  line-height: 1.05; margin-bottom: 32px; color: var(--text);
+}
+.hero h1 em {
+  font-style: normal; color: var(--accent);
+}
+.hero-sub {
+  font-size: clamp(17px, 2vw, 22px); font-weight: 400; color: var(--text-secondary);
+  max-width: 560px; margin: 0 auto 48px; line-height: 1.6;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600;
+  color: var(--bg); background: var(--accent);
+  padding: 18px 44px; border-radius: 100px;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 0 1px rgba(45,212,191,0.3), 0 4px 16px rgba(45,212,191,0.25), 0 12px 40px rgba(45,212,191,0.12);
+}
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(45,212,191,0.4), 0 8px 24px rgba(45,212,191,0.3), 0 20px 60px rgba(45,212,191,0.15);
+}
+.hero-cta svg { width: 18px; height: 18px; transition: transform 0.3s; }
+.hero-cta:hover svg { transform: translateX(4px); }
+.hero-price {
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  color: var(--text-muted); margin-top: 20px; letter-spacing: 1px;
+}
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.hero-scroll span { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 0.3; transform: scaleY(0.6); } 50% { opacity: 1; transform: scaleY(1); } }
+
+/* PULL QUOTE */
+.pull-quote {
+  padding: 100px 40px; max-width: 800px; margin: 0 auto; text-align: center;
+}
+.pull-quote blockquote {
+  font-size: clamp(24px, 3.5vw, 42px); font-weight: 300; letter-spacing: -1px;
+  line-height: 1.4; color: var(--text-secondary); font-style: italic;
+}
+.pull-quote blockquote em { font-style: normal; color: var(--text); font-weight: 500; }
+.pull-quote cite {
+  display: block; margin-top: 24px; font-size: 13px; font-weight: 500;
+  color: var(--text-muted); font-style: normal; letter-spacing: 1px;
+}
+
+/* CHAPTERS */
+.chapters { padding: 140px 40px; max-width: 900px; margin: 0 auto; }
+.chapters h2 {
+  font-size: clamp(28px, 4vw, 52px); font-weight: 800; letter-spacing: -2px;
+  line-height: 1.15; margin-bottom: 72px;
+}
+.chapter-list { display: flex; flex-direction: column; gap: 0; }
+.chapter-item {
+  display: grid; grid-template-columns: 80px 1fr; gap: 32px;
+  padding: 36px 0; border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.chapter-item:first-child { border-top: 1px solid var(--border); }
+.chapter-item:hover { padding-left: 12px; }
+.chapter-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700;
+  color: var(--text-muted); line-height: 1; opacity: 0.3;
+  transition: all 0.3s;
+}
+.chapter-item:hover .chapter-num { color: var(--accent); opacity: 1; }
+.chapter-info h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 8px; }
+.chapter-info p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 540px; }
+
+/* THE SYSTEM (pinned) */
+.system-headline {
+  font-size: clamp(26px, 3.5vw, 48px); font-weight: 800; letter-spacing: -2px;
+  line-height: 1.2; margin-bottom: 40px; max-width: 650px;
+}
+.system-pipeline {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 40px; align-items: start;
+  width: 100%;
+}
+.pipeline-col h4 {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.pipeline-step {
+  display: flex; align-items: center; gap: 16px; padding: 14px 0;
+}
+.pipeline-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted);
+  flex-shrink: 0;
+}
+.pipeline-step.active .pipeline-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.pipeline-step span { font-size: 15px; color: var(--text-secondary); }
+.pipeline-step.active span { color: var(--text); }
+.pipeline-divider {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  padding-top: 24px;
+}
+.pipeline-divider .line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--accent), transparent); }
+.pipeline-divider .checkpoint {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--accent);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  padding: 8px 0;
+  border-left: 1px solid rgba(45,212,191,0.3);
+  padding-left: 8px;
+}
+
+/* AUTHOR */
+.author { padding: 140px 40px; max-width: 800px; margin: 0 auto; }
+.author-content { display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: start; }
+.author-avatar {
+  width: 80px; height: 80px; border-radius: 50%; background: var(--bg-card);
+  border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; color: var(--accent);
+}
+.author-text h2 { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+.author-text p { font-size: 16px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px; }
+.author-text p strong { color: var(--text); font-weight: 600; }
+
+/* BONUS */
+.bonus { padding: 140px 40px; max-width: 800px; margin: 0 auto; }
+.bonus h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 24px; }
+.bonus > p { font-size: 17px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 48px; max-width: 560px; }
+.bonus-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 40px; position: relative; overflow: hidden;
+}
+.bonus-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.bonus-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+.bonus-files { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.bonus-files li {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; color: var(--text-secondary); padding: 8px 0;
+}
+.bonus-files li::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+.bonus-files code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  color: var(--text-muted); background: rgba(255,255,255,0.04);
+  padding: 2px 8px; border-radius: 4px;
+}
+
+/* DIFFERENT */
+.different { padding: 140px 40px; max-width: 900px; margin: 0 auto; }
+.different h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 56px; }
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.diff-card {
+  padding: 32px; border-radius: 16px; background: var(--bg-card);
+  border: 1px solid var(--border); transition: all 0.3s;
+}
+.diff-card:hover { border-color: rgba(45,212,191,0.15); transform: translateY(-2px); }
+.diff-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.diff-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+/* CTA */
+.cta-section { padding: 120px 40px; text-align: center; position: relative; }
+.cta-section::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 600px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(45,212,191,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(36px, 5vw, 72px); font-weight: 900; letter-spacing: -3px;
+  line-height: 1.1; margin-bottom: 20px;
+}
+.cta-section > p { font-size: 18px; color: var(--text-muted); margin-bottom: 48px; }
+.cta-big {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600;
+  color: var(--bg); background: var(--accent);
+  padding: 18px 44px; border-radius: 100px;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 0 1px rgba(45,212,191,0.3), 0 4px 20px rgba(45,212,191,0.3), 0 16px 48px rgba(45,212,191,0.12);
+}
+.cta-big:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(45,212,191,0.4), 0 8px 32px rgba(45,212,191,0.35), 0 24px 64px rgba(45,212,191,0.15);
+}
+.cta-big svg { width: 18px; height: 18px; }
+.cta-price {
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  color: var(--text-muted); margin-top: 20px; letter-spacing: 1px;
+}
+.cta-note { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+.reveal.vis { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border); padding: 28px 40px;
+  text-align: center; color: var(--text-muted); font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  nav { padding: 10px 20px; gap: 16px; } nav a:not(.nav-cta) { display: none; }
+  .chapter-item { grid-template-columns: 48px 1fr; gap: 20px; }
+  .chapter-num { font-size: 32px; }
+  .system-pipeline { grid-template-columns: 1fr; gap: 24px; }
+  .pipeline-divider { flex-direction: row; padding-top: 0; }
+  .pipeline-divider .line { width: 60px; height: 1px; }
+  .pipeline-divider .checkpoint { writing-mode: horizontal-tb; transform: none; }
+  .author-content { grid-template-columns: 1fr; }
+  .diff-grid { grid-template-columns: 1fr; }
+  .hero-scroll { display: none; }
+  .pin-content { padding: 120px 24px 24px; bottom: 210px; }
+  .mesh-canvas { height: 200px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="logo">vibe<span>:</span>coder</div>
+  <a href="#chapters">Chapters</a>
+  <a href="#system">The System</a>
+  <a href="#author">Author</a>
+  <a href="#buy" class="nav-cta">Get the Playbook</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas class="mesh-canvas" id="heroMesh" style="position:absolute;bottom:0;left:0;width:100%;height:280px;"></canvas>
+<!-- vignette removed -->
+  <div class="hero-content">
+    <div class="hero-eyebrow reveal">The Playbook for AI-Native Builders</div>
+    <h1 class="reveal d1">The Vibe-Coder<br><em>Playbook</em></h1>
+    <p class="hero-sub reveal d2">Build and ship your first app with AI. The step-by-step guide from someone who actually did it.</p>
+    <div class="reveal d3">
+      <a href="#buy" class="hero-cta">Get the Playbook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="hero-price reveal d4">PDF + Bonus Template Files</div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- PULL QUOTE -->
+<div class="pull-quote reveal">
+  <blockquote>"Building the app is the easy part. <em>Nobody tells you what happens after.</em>"</blockquote>
+  <cite>Chapter 1</cite>
+</div>
+
+<!-- THE PROBLEM (pinned) -->
+<section class="pin-section" id="s-problem">
+  <div class="pin-content" style="text-align: center; padding-top: 20vh; padding-bottom: 40px;">
+    <div class="section-label pin-item" id="pr-label">The gap</div>
+    <h2 class="pin-item" id="pr-headline" style="font-size: clamp(28px, 4.5vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1.15; margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+      A thousand tutorials on <em style="font-style:normal; color:var(--accent);">how to build.</em><br>Zero on how to actually ship.
+    </h2>
+    <div class="pin-item" id="pr-body" style="display: flex; flex-direction: column; gap: 24px; max-width: 520px; margin: 0 auto; text-align: left;">
+      <p style="font-size: 17px; color: var(--text-secondary); line-height: 1.8;">You can describe what you want in plain English and watch an AI write the code. That part is solved.</p>
+      <p style="font-size: 17px; color: var(--text-secondary); line-height: 1.8;">But getting it on the App Store? Setting up subscriptions? Understanding why Apple rejected your app for the <em style="font-style: normal; color: var(--text);">font size on your pricing screen</em>?</p>
+      <p style="font-size: 17px; color: var(--text); line-height: 1.8; font-weight: 500;">That's the gap this playbook fills.</p>
+    </div>
+  </div>
+  <canvas class="mesh-canvas" id="mesh1"></canvas>
+</section>
+
+<!-- CHAPTERS -->
+<section class="chapters" id="chapters">
+  <div class="section-label reveal">What's inside</div>
+  <h2 class="reveal d1">Four chapters.<br>Zero filler.</h2>
+  <div class="chapter-list">
+    <div class="chapter-item reveal">
+      <div class="chapter-num">01</div>
+      <div class="chapter-info">
+        <h3>The Vibe-Coding Revolution</h3>
+        <p>The new builder demographic. What "vibe coding" actually means. Why building is easy but shipping is hard — and why nobody's filling the gap.</p>
+      </div>
+    </div>
+    <div class="chapter-item reveal d1">
+      <div class="chapter-num">02</div>
+      <div class="chapter-info">
+        <h3>From Idea to Concept</h3>
+        <p>The Multi-AI War Room. How to use Claude, ChatGPT, and Grok as a board of advisors to pressure-test and refine your idea into a build-ready concept.</p>
+      </div>
+    </div>
+    <div class="chapter-item reveal d2">
+      <div class="chapter-num">03</div>
+      <div class="chapter-info">
+        <h3>Building with AI — The System</h3>
+        <p>The App Incubator. A structured build system that takes your concept docs and produces a running app autonomously. Approve the architecture, go to sleep, wake up to a finished app.</p>
+      </div>
+    </div>
+    <div class="chapter-item reveal d3">
+      <div class="chapter-num">04</div>
+      <div class="chapter-info">
+        <h3>The App Store Gauntlet</h3>
+        <p>Apple's review process demystified. The submission checklist. Common rejections and how to survive them. Real rejection stories and how they were resolved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE 2 -->
+<div class="pull-quote reveal">
+  <blockquote>"AI is an incredible builder but a <em>terrible architect.</em> Give it a plan and it'll execute beautifully. Give it a vague idea and you'll get a beautiful mess."</blockquote>
+  <cite>Chapter 3</cite>
+</div>
+
+<!-- THE SYSTEM (pinned) -->
+<section class="pin-section" id="system">
+  <div class="pin-content" style="padding-top: 22vh;">
+    <div class="section-label pin-item" id="sys-label">The App Incubator</div>
+    <h2 class="system-headline pin-item" id="sys-head">Approve the architecture.<br>Go to sleep.<br><span style="color:var(--accent)">Wake up to an app.</span></h2>
+    <div class="system-pipeline pin-item" id="sys-pipe">
+      <div class="pipeline-col">
+        <h4>You + AI</h4>
+        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Context synthesis</span></div>
+        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Clarifying questions</span></div>
+        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Stack selection</span></div>
+        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Architecture review</span></div>
+      </div>
+      <div class="pipeline-divider">
+        <div class="line"></div>
+        <div class="checkpoint">Last checkpoint</div>
+        <div class="line"></div>
+      </div>
+      <div class="pipeline-col">
+        <h4>AI Only (autonomous)</h4>
+        <div class="pipeline-step"><div class="pipeline-dot"></div><span>BUILD_SPEC generation</span></div>
+        <div class="pipeline-step"><div class="pipeline-dot"></div><span>Asset generation</span></div>
+        <div class="pipeline-step"><div class="pipeline-dot"></div><span>BUILD_SEQUENCE</span></div>
+        <div class="pipeline-step"><div class="pipeline-dot"></div><span>Phased build + QA gates</span></div>
+        <div class="pipeline-step"><div class="pipeline-dot"></div><span>Post-build retrospective</span></div>
+      </div>
+    </div>
+  </div>
+  <canvas class="mesh-canvas" id="mesh2"></canvas>
+</section>
+
+<!-- WHAT MAKES THIS DIFFERENT -->
+<section class="different" id="different">
+  <div class="section-label reveal">Why this playbook</div>
+  <h2 class="reveal d1">Not theory.<br>Not vibes.</h2>
+  <div class="diff-grid">
+    <div class="diff-card reveal">
+      <h3>Written by a builder, not a guru</h3>
+      <p>This is from someone who actually navigated the entire process — not a consultant, not an agency. Real rejections, real revenue numbers, real mistakes.</p>
+    </div>
+    <div class="diff-card reveal d1">
+      <h3>Honest about the hard parts</h3>
+      <p>No "$100K in 30 days" energy. Realistic timelines, realistic budgets, realistic expectations. Including what went wrong.</p>
+    </div>
+    <div class="diff-card reveal d2">
+      <h3>Specific to the AI era</h3>
+      <p>This isn't recycled developer advice from 2019. It's built for people who code with Claude, ship with AI, and don't want to become traditional developers.</p>
+    </div>
+    <div class="diff-card reveal d3">
+      <h3>Includes the actual template</h3>
+      <p>The App Incubator files aren't theoretical — they're the real system. Drop your concept in, follow the process, let the AI build.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHOR -->
+<section class="author" id="author">
+  <div class="section-label reveal">About the author</div>
+  <div class="author-content reveal d1">
+    <div class="author-avatar">J</div>
+    <div class="author-text">
+      <h2>Built by J</h2>
+      <p>I built <strong>PrimeState</strong> — a cognitive optimization tracker — using Claude Code and a lot of late nights. I'm not a developer by training. I navigated every step myself: ideation, building, App Store submission, rejection, resubmission, and everything in between.</p>
+      <p>I've been building with AI tools since they existed. Multiple projects, multiple stacks, multiple failures. Each one taught me something the tutorials never mentioned.</p>
+      <p>This playbook is everything I wish someone had told me before I started.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BONUS -->
+<section class="bonus" id="bonus">
+  <div class="section-label reveal">Included free</div>
+  <h2 class="reveal d1">The App Incubator<br>Template Files</h2>
+  <p class="reveal d2">The exact system from Chapter 3. Not a summary — the actual files. Drop your brainstorm docs in, follow the process, and let the AI build your app.</p>
+  <div class="bonus-card reveal d3">
+    <h3>What's in the template</h3>
+    <ul class="bonus-files">
+      <li><code>CLAUDE.md</code> Master instructions — tells the AI how to build your app</li>
+      <li><code>INCUBATOR_PROCESS.md</code> The 9-stage pipeline from concept to running app</li>
+      <li><code>STACK_PROFILES.md</code> Pre-tested tech stack combinations that work together</li>
+      <li><code>SPECIFICATION_STANDARDS.md</code> What "detailed enough" actually means</li>
+      <li><code>BUILD_PROCESS_TEMPLATE.md</code> Templates for BUILD_SPEC, BUILD_SEQUENCE, STATE.md</li>
+      <li><code>7-step quality protocol</code> The gates that prevent garbage builds</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="buy">
+  <h2 class="reveal">Ship it.</h2>
+  <p class="reveal d1">Stop building apps that live in folders. Get yours on the App Store.</p>
+  <div class="reveal d2">
+    <a href="#" class="cta-big">Get the Playbook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+  <div class="cta-price reveal d3">PDF + Template Files</div>
+  <div class="cta-note reveal d4">Everything you need to go from idea to App Store.</div>
+</section>
+
+<footer>The Vibe-Coder Playbook &mdash; 2026</footer>
+
+<script>
+// ===== DOT MESH CANVAS =====
+// Wave-shaped rows of dots — like Co-Own waves but dots instead of lines,
+// dense enough layers that it reads as a flowing mesh
+const meshIds = ['heroMesh', 'mesh1', 'mesh2'];
+const meshCanvases = meshIds.map(id => {
+  const c = document.getElementById(id);
+  return c ? { c, ctx: c.getContext('2d') } : null;
+}).filter(Boolean);
+
+let meshT = 0;
+const LAYERS = 40;         // number of wave rows (dense mesh)
+const DOT_SPACING = 8;     // horizontal px between dots along each wave
+const DOT_R = 1.2;         // dot radius
+const AMP = 10;            // wave amplitude (subtle so rows stay evenly spaced)
+const WAVE_SPEED = 0.004;
+
+function meshResize() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  meshCanvases.forEach(m => {
+    const w = m.c.clientWidth, h = m.c.clientHeight;
+    if (!w) return;
+    m.w = w; m.h = h;
+    m.c.width = w * dpr; m.c.height = h * dpr;
+    m.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  });
+}
+
+function meshDraw() {
+  meshT += WAVE_SPEED;
+
+  meshCanvases.forEach(m => {
+    if (!m.w) return;
+    const { ctx, w, h } = m;
+    ctx.clearRect(0, 0, w, h);
+
+    const cols = Math.ceil(w / DOT_SPACING);
+
+    for (let L = 0; L < LAYERS; L++) {
+      const p = L / (LAYERS - 1);           // 0→1 progress through layers
+      const baseY = h * (0.02 + p * 0.96);   // spread across full canvas height
+      const layerAlpha = 0.15 + p * 0.35;
+
+      for (let i = 0; i <= cols; i++) {
+        const x = (i / cols) * w;
+        const nx = i / cols;
+
+        // Wave displacement — same math as Co-Own but with 3 harmonics
+        const y = baseY
+          + Math.sin(nx * 10 + meshT + L * 0.6) * AMP
+          + Math.sin(nx * 7 - meshT * 0.5 + L * 0.4) * (AMP * 0.4)
+          + Math.cos(nx * 14 + meshT * 0.3 + L * 0.8) * (AMP * 0.2);
+
+        // Edge fade — strong top fade to prevent text overlap, gentle sides
+        const ny = y / h;
+        const fadeTop = Math.min(1, ny * 2.5);              // strong: gone by top 40%
+        const fadeBottom = Math.min(1, (1 - ny) * 4);       // gentle bottom
+        const fadeLeft = Math.min(1, nx * 3);
+        const fadeRight = Math.min(1, (1 - nx) * 3);
+        const smoothFade = fadeTop * fadeBottom * fadeLeft * fadeRight;
+
+        const alpha = layerAlpha * smoothFade;
+        if (alpha < 0.02) continue;
+
+        ctx.beginPath();
+        ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+        ctx.fill();
+      }
+    }
+  });
+
+  requestAnimationFrame(meshDraw);
+}
+
+meshResize();
+meshDraw();
+window.addEventListener('resize', meshResize);
+
+// ===== GSAP =====
+gsap.registerPlugin(ScrollTrigger);
+
+// Problem section pin
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#s-problem",
+    start: "top top",
+    end: "+=300%",
+    pin: true,
+    scrub: 0.8,
+    anticipatePin: 1,
+  }
+})
+.to("#pr-label", { opacity: 1, y: 0, duration: 1.5 }, 0)
+.to("#pr-headline", { opacity: 1, y: 0, duration: 1.5 }, 1)
+.to("#pr-body", { opacity: 1, y: 0, duration: 1.5 }, 2.5);
+
+// System section pin
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#system",
+    start: "top top",
+    end: "+=350%",
+    pin: true,
+    scrub: 0.8,
+    anticipatePin: 1,
+  }
+})
+.to("#sys-label", { opacity: 1, y: 0, duration: 1.5 }, 0)
+.to("#sys-head", { opacity: 1, y: 0, duration: 1.5 }, 1.5)
+.to("#sys-pipe", { opacity: 1, y: 0, duration: 1.5 }, 3);
+
+// Scroll reveals
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('vis');
+    else e.target.classList.remove('vis');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// Progress bar
+window.addEventListener('scroll', () => {
+  document.getElementById('progress').style.width =
+    (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
+}, { passive: true });
+
+// Smooth nav
+document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

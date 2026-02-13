@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Co-Own for Builders — Your Product Deserves Distribution</title>
+<meta name="description" content="You built something great. Now let AI find the creators who'll grow it. Revenue partnerships with zero upfront cost.">
+<meta property="og:title" content="Co-Own for Builders">
+<meta property="og:description" content="AI-powered distribution for indie software. Zero upfront cost. Pay only when revenue flows.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #FFFFFF; --text: #111110; --text-secondary: #3D3D3A;
+  --text-muted: #6B6B66; --accent: #4F46E5; --accent-light: #818CF8;
+  --builder: #4F46E5; --creator: #7C3AED; --border: rgba(0,0,0,0.06);
+  --surface: #F8F8FA;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+/* NAV */
+nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 32px; padding: 12px 28px; background: rgba(255,255,255,0.82); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 100px; box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04); }
+.logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; letter-spacing: -0.5px; color: var(--text); text-decoration: none; }
+.logo span { color: var(--accent); }
+nav a { font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+nav a:hover { color: var(--text); }
+nav .nav-cta { font-size: 13px; font-weight: 600; color: #fff; background: var(--accent); padding: 8px 20px; border-radius: 100px; text-decoration: none; transition: all 0.2s; box-shadow: 0 1px 3px rgba(79,70,229,0.3); }
+nav .nav-cta:hover { background: #4338CA; transform: translateY(-1px); }
+.builder-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); background: rgba(79,70,229,0.08); padding: 4px 12px; border-radius: 100px; }
+
+/* HERO */
+.hero { min-height: 80vh; display: flex; align-items: center; padding: 140px 40px 100px; max-width: 1100px; margin: 0 auto; }
+.hero-content { max-width: 700px; }
+.hero-label { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); margin-bottom: 24px; }
+.hero h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 24px; }
+.hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--builder), var(--creator)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { font-size: 20px; color: var(--text-secondary); line-height: 1.6; max-width: 560px; margin-bottom: 40px; }
+.hero-cta { display: inline-flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600; color: #fff; background: var(--accent); padding: 16px 40px; border-radius: 100px; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 1px 3px rgba(79,70,229,0.2), 0 4px 16px rgba(79,70,229,0.25); }
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(79,70,229,0.25), 0 8px 24px rgba(79,70,229,0.3); }
+
+/* SECTIONS */
+.section { padding: 120px 40px; max-width: 1100px; margin: 0 auto; }
+.section-alt { background: var(--surface); }
+.section-alt .section { padding: 120px 40px; max-width: 1100px; margin: 0 auto; }
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); margin-bottom: 20px; }
+.section h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 24px; max-width: 650px; }
+.section > p, .section-alt p.section-desc { font-size: 18px; color: var(--text-secondary); line-height: 1.7; max-width: 600px; margin-bottom: 48px; }
+
+/* PROBLEM STATS */
+.problem-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+.stat-card { padding: 32px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
+.stat-number { font-family: 'JetBrains Mono', monospace; font-size: 36px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+.stat-label { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.stat-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+/* STEPS */
+.steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+.step-line { position: absolute; left: 31px; top: 40px; bottom: 40px; width: 2px; background: linear-gradient(to bottom, var(--builder), var(--creator)); }
+.step { display: flex; gap: 32px; padding: 32px 0; position: relative; z-index: 1; }
+.step-num { flex-shrink: 0; width: 62px; height: 62px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #fff; background: var(--accent); box-shadow: 0 2px 12px rgba(79,70,229,0.25); }
+.step:nth-child(5) .step-num { background: #6D28D9; }
+.step:nth-child(6) .step-num { background: var(--creator); }
+.step-body h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.step-body p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; max-width: 520px; }
+.step-body .step-detail { font-size: 14px; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+
+/* MOCK DASHBOARD */
+.dashboard-wrap { margin-top: 48px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06), 0 24px 64px rgba(0,0,0,0.04); background: #fff; }
+.dash-topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: #FAFAFC; border-bottom: 1px solid var(--border); }
+.dash-topbar-left { display: flex; align-items: center; gap: 16px; }
+.dash-dot { width: 10px; height: 10px; border-radius: 50%; }
+.dash-dot-r { background: #FF5F57; } .dash-dot-y { background: #FFBD2E; } .dash-dot-g { background: #28C840; }
+.dash-title { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+.dash-body { padding: 32px; }
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.dash-metric { padding: 20px; border-radius: 12px; background: var(--surface); }
+.dash-metric-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.dash-metric-value { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; color: var(--text); }
+.dash-metric-value.accent { color: var(--accent); }
+.dash-metric-change { font-size: 12px; color: #10B981; font-weight: 600; margin-top: 4px; }
+.dash-table { width: 100%; border-collapse: collapse; }
+.dash-table th { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.dash-table td { font-size: 14px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.03); }
+.dash-table .score-pill { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--accent); background: rgba(79,70,229,0.08); padding: 4px 12px; border-radius: 100px; }
+.dash-table .status-active { color: #10B981; font-weight: 600; font-size: 13px; }
+.dash-table .status-pending { color: #F59E0B; font-weight: 600; font-size: 13px; }
+
+/* ECONOMICS */
+.econ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.econ-card { padding: 36px; border-radius: 20px; border: 1px solid var(--border); background: #fff; }
+.econ-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+.econ-card ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.econ-card li { font-size: 15px; color: var(--text-secondary); padding-left: 24px; position: relative; line-height: 1.5; }
+.econ-card li::before { content: ''; position: absolute; left: 3px; top: 6px; width: 7px; height: 12px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); }
+.econ-card.highlight { border-color: rgba(79,70,229,0.15); box-shadow: 0 2px 8px rgba(79,70,229,0.06), 0 12px 32px rgba(79,70,229,0.04); }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 0; max-width: 700px; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q { font-size: 17px; font-weight: 600; padding: 24px 0 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.faq-q::after { content: '+'; font-family: 'JetBrains Mono', monospace; font-size: 20px; color: var(--text-muted); transition: transform 0.3s; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding-bottom: 0; }
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 24px; }
+
+/* CTA */
+.cta { padding: 120px 40px; text-align: center; background: #18181B; color: #fff; }
+.cta h2 { font-size: clamp(36px, 5vw, 64px); font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+.cta p { font-size: 18px; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+.cta-form { display: flex; gap: 12px; max-width: 440px; margin: 0 auto 20px; }
+.cta-form input { flex: 1; font-family: 'Inter', sans-serif; font-size: 16px; padding: 16px 24px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; color: #fff; outline: none; transition: all 0.3s; }
+.cta-form input::placeholder { color: rgba(255,255,255,0.3); }
+.cta-form input:focus { border-color: var(--accent-light); background: rgba(255,255,255,0.1); }
+.cta-form button { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; padding: 16px 32px; background: var(--accent); color: #fff; border: none; border-radius: 100px; cursor: pointer; transition: all 0.3s; white-space: nowrap; box-shadow: 0 1px 3px rgba(79,70,229,0.3), 0 4px 16px rgba(79,70,229,0.3); }
+.cta-form button:hover { background: #4338CA; transform: translateY(-1px); }
+.cta-note { font-size: 13px; color: rgba(255,255,255,0.3); }
+.form-success { display: none; font-size: 17px; color: var(--accent-light); font-weight: 500; }
+
+/* REVEALS */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+.reveal.vis { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; }
+
+footer { background: #18181B; border-top: 1px solid rgba(255,255,255,0.05); padding: 28px 40px; text-align: center; color: rgba(255,255,255,0.25); font-size: 13px; }
+
+@media (max-width: 768px) {
+  nav { padding: 10px 20px; gap: 12px; } nav a:not(.nav-cta):not(.logo) { display: none; } .builder-badge { display: none; }
+  .hero { padding: 120px 24px 80px; }
+  .section, .section-alt .section { padding: 80px 24px; }
+  .problem-stats { grid-template-columns: 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .econ-grid { grid-template-columns: 1fr; }
+  .cta-form { flex-direction: column; }
+  .dash-table { font-size: 13px; }
+  .dash-table th, .dash-table td { padding: 10px 8px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/co-own-v3/" class="logo">co<span>/</span>own</a>
+  <span class="builder-badge">For builders</span>
+  <a href="/co-own-v3/for-creators.html">For creators</a>
+  <a href="/co-own-v3/#waitlist" class="nav-cta">Join waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label reveal">For builders</div>
+    <h1 class="reveal d1">You built something great.<br>Now let <em>AI find who grows it</em>.</h1>
+    <p class="reveal d2">Co-Own connects your product with content creators whose audiences are predicted to convert — and gives them a reason to promote it like it's their own. Because it is.</p>
+    <div class="reveal d3"><a href="/co-own-v3/#waitlist" class="hero-cta">Join as a builder</a></div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<div class="section-alt">
+  <div class="section">
+    <div class="section-label reveal">The distribution problem</div>
+    <h2 class="reveal d1">You don't have a product problem.<br>You have a growth problem.</h2>
+    <p class="reveal d2">AI made building easy. It didn't make marketing easy. The gap between shipping a product and getting people to pay for it is wider than ever.</p>
+    <div class="problem-stats reveal d3">
+      <div class="stat-card">
+        <div class="stat-number">95%</div>
+        <div class="stat-label">Die before $1K MRR</div>
+        <div class="stat-desc">Most indie SaaS products never reach meaningful revenue. Not because they're bad — because nobody knows they exist.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$0</div>
+        <div class="stat-label">Your ad budget</div>
+        <div class="stat-desc">You're not going to outspend funded competitors on Google Ads. And you shouldn't have to. There's a better way.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">10x</div>
+        <div class="stat-label">Creator > ads</div>
+        <div class="stat-desc">A creator who genuinely believes in your product will outperform any paid campaign. Trust converts. Ads interrupt.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-label reveal">How it works</div>
+  <h2 class="reveal d1">Four steps. Zero upfront cost.</h2>
+  <p class="reveal d2">From listing to revenue in under a week. No agencies. No cold outreach. No negotiation.</p>
+  <div class="steps reveal d3">
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Connect Stripe & list your product</h3>
+        <p>Link your Stripe account so we can verify real revenue data. Describe your product, your users, and the kind of growth you need. Takes about 3 minutes.</p>
+        <div class="step-detail">Revenue data is used for matching accuracy — never shared publicly.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>AI analyzes your product</h3>
+        <p>Our engine evaluates your product's positioning, user base, growth trajectory, and competitive landscape. It identifies which creator audiences are most likely to convert for what you built.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Review AI-matched creators</h3>
+        <p>You receive scored matches — creators whose audiences our AI predicts will convert for your product. Each match includes a score breakdown, predicted revenue impact, and a recommended revenue split.</p>
+        <div class="step-detail">You only see high-confidence matches. No browsing, no guessing.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Accept and grow</h3>
+        <p>Accept a match → the creator starts promoting → users convert → revenue splits automatically through Stripe Connect. Full transparency. Both sides see every dollar in real time.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD MOCKUP -->
+<div class="section-alt">
+  <div class="section">
+    <div class="section-label reveal">Your dashboard</div>
+    <h2 class="reveal d1">Everything in one place.</h2>
+    <p class="reveal d2">Track partnerships, revenue, and creator performance without leaving your IDE mindset.</p>
+    <div class="dashboard-wrap reveal d3">
+      <div class="dash-topbar">
+        <div class="dash-topbar-left">
+          <div style="display:flex;gap:6px;"><div class="dash-dot dash-dot-r"></div><div class="dash-dot dash-dot-y"></div><div class="dash-dot dash-dot-g"></div></div>
+          <div class="dash-title">co/own &mdash; Builder Dashboard</div>
+        </div>
+      </div>
+      <div class="dash-body">
+        <div class="dash-grid">
+          <div class="dash-metric">
+            <div class="dash-metric-label">Monthly Revenue</div>
+            <div class="dash-metric-value">$8,420</div>
+            <div class="dash-metric-change">+23% vs last month</div>
+          </div>
+          <div class="dash-metric">
+            <div class="dash-metric-label">From Partnerships</div>
+            <div class="dash-metric-value accent">$3,180</div>
+            <div class="dash-metric-change">38% of total revenue</div>
+          </div>
+          <div class="dash-metric">
+            <div class="dash-metric-label">Active Partners</div>
+            <div class="dash-metric-value">3</div>
+            <div class="dash-metric-change">1 new match pending</div>
+          </div>
+        </div>
+        <table class="dash-table">
+          <thead><tr><th>Creator</th><th>Audience</th><th>Match Score</th><th>Revenue Driven</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>@sarahbuilds</strong></td><td>84K &middot; Productivity</td><td><span class="score-pill">92%</span></td><td>$1,840/mo</td><td><span class="status-active">Active</span></td></tr>
+            <tr><td><strong>@devtoolsweekly</strong></td><td>31K &middot; Developer tools</td><td><span class="score-pill">87%</span></td><td>$940/mo</td><td><span class="status-active">Active</span></td></tr>
+            <tr><td><strong>@focusmode</strong></td><td>52K &middot; Deep work</td><td><span class="score-pill">84%</span></td><td>$400/mo</td><td><span class="status-active">Active</span></td></tr>
+            <tr><td><strong>@indieapps</strong></td><td>118K &middot; App reviews</td><td><span class="score-pill">91%</span></td><td>--</td><td><span class="status-pending">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ECONOMICS -->
+<div class="section">
+  <div class="section-label reveal">The economics</div>
+  <h2 class="reveal d1">Pay nothing until money flows.</h2>
+  <div class="econ-grid reveal d2">
+    <div class="econ-card">
+      <h3>What it costs</h3>
+      <ul>
+        <li>Zero to list your product</li>
+        <li>Zero to get matched</li>
+        <li>Zero to start a partnership</li>
+        <li>3% platform fee on revenue that flows through partnerships</li>
+        <li>Standard Stripe processing fees apply</li>
+      </ul>
+    </div>
+    <div class="econ-card highlight">
+      <h3>What you get</h3>
+      <ul>
+        <li>AI-matched creators who'll promote your product to their audience</li>
+        <li>Distribution you couldn't buy with ads at any budget</li>
+        <li>A growth partner who's financially invested in your success</li>
+        <li>Full revenue transparency through Stripe Connect</li>
+        <li>No contracts to negotiate, no agencies to pay</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- AI ADVANTAGE -->
+<div class="section-alt">
+  <div class="section">
+    <div class="section-label reveal">Why AI matters</div>
+    <h2 class="reveal d1">Not just matching.<br>Understanding.</h2>
+    <p class="section-desc reveal d2">A keyword-based algorithm would match your focus timer app with any "productivity" creator. Our AI reads their content and knows the difference between a creator who talks about deep work methodologies and one who talks about hustle culture side-income. That distinction is the difference between a partnership that converts and one that doesn't.</p>
+    <div class="problem-stats reveal d3">
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:24px;">Content analysis</div>
+        <div class="stat-desc" style="margin-top:12px;">AI reads the creator's last 100+ posts to understand what their audience actually responds to — not just their bio category.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:24px;">Revenue prediction</div>
+        <div class="stat-desc" style="margin-top:12px;">Before you see a match, the AI has predicted how much revenue this creator is likely to drive for your specific product.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:24px;">Ongoing monitoring</div>
+        <div class="stat-desc" style="margin-top:12px;">Post-match, AI tracks partnership health — promotion frequency, audience response, conversion trends — and flags issues before they cost you.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <div class="section-label reveal">Common questions</div>
+  <h2 class="reveal d1">What builders ask.</h2>
+  <div class="faq-list reveal d2">
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I give up equity in my company?</div>
+      <div class="faq-a">No. This is revenue sharing, not equity. You keep 100% ownership of your company. The creator earns a percentage of revenue for as long as the partnership is active. Either side can exit with 30 days notice.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if the creator doesn't actually promote my product?</div>
+      <div class="faq-a">Every partnership has minimum promotion requirements. If a creator's activity drops below the threshold, their revenue share pauses automatically. The AI also monitors promotion quality and flags underperformance early.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How is the revenue split determined?</div>
+      <div class="faq-a">Our AI evaluates both sides — your product's metrics, the creator's audience quality, predicted conversion rates, and the marginal revenue the creator is expected to drive. It outputs a specific, justified percentage. No negotiation required.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What does my product need to qualify?</div>
+      <div class="faq-a">A working product with real users. We verify through Stripe Connect — if you're processing payments, you qualify. Pre-revenue products with a free user base may qualify with a higher creator split to offset risk.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I end a partnership?</div>
+      <div class="faq-a">Yes. Either side can terminate with 30 days notice. No exit fees, no penalty. Clean break. Revenue share stops when the notice period ends.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I know the creator's audience is real?</div>
+      <div class="faq-a">Creators connect their social accounts via OAuth. Our AI analyzes engagement patterns, audience authenticity, bot ratios, and comment quality. We set a minimum engagement floor and filter out inflated accounts before you ever see them.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <h2 class="reveal">Your product deserves<br>distribution.</h2>
+  <p class="reveal d1">Join the first cohort of builders getting AI-matched with growth partners.</p>
+  <form class="cta-form reveal d2" id="waitlistForm" onsubmit="return submitWaitlist(event)">
+    <input type="email" name="email" placeholder="your@email.com" required>
+    <button type="submit" id="submitBtn">Join as builder</button>
+  </form>
+  <div class="form-success" id="formSuccess">You're in. We'll be in touch.</div>
+  <div class="cta-note reveal d3">Launching Q2 2026</div>
+</section>
+
+<footer><a href="/co-own-v3/" style="color:rgba(255,255,255,0.4);text-decoration:none;">co/own</a> &mdash; 2026</footer>
+
+<script>
+// Reveal on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Waitlist
+async function submitWaitlist(e) {
+  e.preventDefault();
+  const form = document.getElementById('waitlistForm'), btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const r = await fetch('/command/api/co-own/waitlist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.querySelector('input').value, role: 'builder', source: 'for-builders' })
+    });
+    if (r.ok) { form.style.display = 'none'; document.getElementById('formSuccess').style.display = 'block'; }
+    else { btn.textContent = 'Try again'; btn.disabled = false; }
+  } catch(e) { btn.textContent = 'Try again'; btn.disabled = false; }
+  return false;
+}
+</script>
+</body>
+</html>

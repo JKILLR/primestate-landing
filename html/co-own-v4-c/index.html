@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Co-Own — Revenue Partnerships for Software [Muted Teal]</title>
+<meta name="description" content="AI-powered marketplace where software builders and content creators form revenue partnerships. Intelligent matching, automated splits, real alignment.">
+<meta property="og:title" content="Co-Own — Revenue Partnerships for Software">
+<meta property="og:description" content="AI-powered revenue partnerships between software builders and content creators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- GSAP + ScrollTrigger (same lib micro1.ai uses) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #FFFFFF; --bg-warm: #FFFFFF; --text: #111110; --text-secondary: #3D3D3A;
+  --text-muted: #6B6B66; --accent: #5B8A8A; --accent-light: #7FB5B5;
+  --accent-soft: rgba(91,138,138,0.05); --builder: #5B8A8A; --creator: #2D5F5F;
+  --border: rgba(0,0,0,0.06);
+}
+html, body { overflow-x: clip; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #FFFFFF; color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+#gradient-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; will-change: background; }
+
+#progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--builder), var(--creator)); z-index: 1000; width: 0%; }
+
+nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; align-items: center; gap: 32px; padding: 12px 28px; background: rgba(255,255,255,0.82); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 100px; transition: all 0.4s; box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.03); }
+nav.dark-mode { background: rgba(20,34,32,0.88); border-color: rgba(255,255,255,0.08); }
+nav.dark-mode .logo { color: #fff; } nav.dark-mode .logo span { color: var(--accent-light); }
+nav.dark-mode a { color: rgba(255,255,255,0.5); } nav.dark-mode a:hover { color: #fff; }
+.logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; letter-spacing: -0.5px; color: var(--text); transition: color 0.4s; }
+.logo span { color: var(--accent); transition: color 0.4s; }
+nav a { font-size: 13px; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+nav a:hover { color: var(--text); }
+nav .nav-cta { font-size: 13px; font-weight: 600; color: #fff; background: var(--accent); padding: 8px 20px; border-radius: 100px; text-decoration: none; transition: all 0.2s; box-shadow: 0 1px 3px rgba(91,138,138,0.3), 0 4px 12px rgba(91,138,138,0.15); }
+nav .nav-cta:hover { background: #4A7676; transform: translateY(-1px); box-shadow: 0 2px 6px rgba(91,138,138,0.35), 0 8px 20px rgba(91,138,138,0.2); }
+
+/* ===== PINNED SECTIONS ===== */
+.pin-section {
+  height: 100vh; width: 100%; position: relative; overflow: hidden; z-index: 1;
+}
+.pin-content {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 250px;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 40px 20px; max-width: 1100px; margin: 0 auto; width: 100%;
+  z-index: 1;
+}
+.pin-canvas { position: absolute; bottom: 0; left: 0; width: 100%; height: 400px; }
+.pin-spacer { overflow: visible !important; }
+
+/* Items start invisible — GSAP animates them in */
+.pin-item { opacity: 0; transform: translateY(30px); }
+
+/* Label morph targets — width:fit-content so xToCenter() measures text, not container */
+.section-label { transform-origin: center center; will-change: transform; }
+#p1, #h1, #sc-label { width: fit-content; }
+#p1 { margin: 0 auto; }
+
+/* ===== HERO (not pinned) ===== */
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; padding: 120px 40px 80px; text-align: center; background: transparent; }
+.hero-content { position: relative; z-index: 2; }
+.hero-split { display: flex; justify-content: center; align-items: baseline; gap: 24px; margin-bottom: 40px; }
+.hero-split .word { font-size: clamp(48px, 8vw, 120px); font-weight: 900; letter-spacing: -3px; line-height: 1; }
+.word-builders { color: var(--builder); } .word-x { font-size: clamp(24px, 3vw, 48px); font-weight: 300; color: var(--text-muted); letter-spacing: 0; } .word-creators { color: var(--creator); }
+.hero-tagline { font-size: clamp(18px, 2.2vw, 28px); font-weight: 400; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; line-height: 1.5; }
+.hero-cta { display: inline-flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600; color: #fff; background: var(--accent); padding: 16px 40px; border-radius: 100px; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 1px 3px rgba(91,138,138,0.2), 0 4px 16px rgba(91,138,138,0.25), 0 12px 40px rgba(91,138,138,0.15); }
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(91,138,138,0.25), 0 8px 24px rgba(91,138,138,0.3), 0 20px 60px rgba(91,138,138,0.2); }
+.hero-cta svg { width: 18px; height: 18px; transition: transform 0.3s; } .hero-cta:hover svg { transform: translateX(4px); }
+.hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.hero-scroll span { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.3; transform: scaleY(0.6); } 50% { opacity: 1; transform: scaleY(1); } }
+
+/* ===== TYPOGRAPHY ===== */
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 32px; }
+.problem-statement { font-size: clamp(28px, 4.5vw, 60px); font-weight: 800; letter-spacing: -2px; line-height: 1.15; margin-bottom: 64px; max-width: 900px; }
+.problem-statement em { font-style: normal; background: linear-gradient(135deg, var(--builder), var(--creator)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.problem-columns { display: flex; flex-direction: column; align-items: center; gap: 48px; max-width: 600px; margin: 0 auto; text-align: center; }
+.problem-col h3 { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+.builder-col h3 { color: var(--builder); } .creator-col h3 { color: var(--creator); }
+.problem-col p { font-size: 17px; line-height: 1.7; color: var(--text-secondary); }
+
+.solution-headline { font-size: clamp(32px, 4vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1.15; margin-bottom: 48px; max-width: 700px; }
+.solution-steps { position: relative; padding-left: 36px; }
+.vert-line { position: absolute; left: 27px; top: 28px; bottom: 28px; width: 2px; background: linear-gradient(to bottom, var(--builder), var(--creator)); }
+.step { display: flex; gap: 32px; align-items: flex-start; padding: 24px 0; }
+.step-number { flex-shrink: 0; width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #fff; background: var(--accent); position: relative; z-index: 2; box-shadow: 0 1px 2px rgba(91,138,138,0.2), 0 4px 12px rgba(91,138,138,0.25), 0 12px 32px rgba(91,138,138,0.12); }
+.step:nth-child(4) .step-number { background: #3D6B6B; }
+.step-text h3 { font-size: 21px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 6px; }
+.step-text p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; max-width: 480px; }
+
+.score-left h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 24px; }
+.score-left p { font-size: 17px; color: var(--text-secondary); line-height: 1.7; max-width: 440px; }
+.score-card { background: #fff; border-radius: 20px; padding: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.08), 0 32px 80px rgba(91,138,138,0.04); position: relative; overflow: hidden; }
+.score-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--builder), var(--creator)); }
+.score-match-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px; }
+.score-number { font-family: 'JetBrains Mono', monospace; font-size: 72px; font-weight: 700; letter-spacing: -4px; line-height: 1; margin-bottom: 32px; background: linear-gradient(135deg, var(--builder), var(--creator)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.score-bars { display: flex; flex-direction: column; gap: 16px; }
+.score-bar-row { display: flex; align-items: center; gap: 16px; }
+.score-bar-label { font-size: 13px; font-weight: 500; color: var(--text-muted); width: 100px; flex-shrink: 0; }
+.score-bar-track { flex: 1; height: 6px; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+.bar-audience { background: var(--builder); } .bar-product { background: #3D6B6B; } .bar-values { background: var(--creator); } .bar-revenue { background: #8B6B4A; }
+.score-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-secondary); width: 36px; text-align: right; }
+
+.revenue-example { margin-top: 8px; padding: 28px 32px; background: rgba(91,138,138,0.04); border-radius: 16px; border: 1px solid rgba(91,138,138,0.08); max-width: 800px; }
+.rev-header { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px; }
+.rev-cols { display: flex; align-items: center; gap: 24px; }
+.rev-col { flex: 1; }
+.rev-col-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 10px; }
+.rev-arrow { font-size: 28px; color: var(--accent); flex-shrink: 0; padding: 0 8px; }
+.rev-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.rev-label { font-size: 14px; color: var(--text-secondary); }
+.rev-value { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 600; color: var(--text); }
+.rev-accent { color: var(--accent); }
+.rev-highlight .rev-value { font-size: 20px; font-weight: 700; }
+.rev-footer { font-size: 12px; color: var(--text-muted); margin-top: 16px; font-style: italic; }
+
+/* ===== NORMAL SCROLL SECTIONS ===== */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1); }
+.reveal.vis { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
+
+.why { padding: 140px 40px; max-width: 1100px; margin: 0 auto; }
+.why h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 64px; max-width: 650px; }
+.why-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.why-card { padding: 44px; border-radius: 20px; }
+.why-card.old-way { background: rgba(255,255,255,0.8); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04); }
+.why-card.new-way { background: #fff; border: 1px solid rgba(91,138,138,0.12); box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 8px 24px rgba(91,138,138,0.06), 0 24px 60px rgba(91,138,138,0.04); }
+.why-card-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; display: inline-block; padding: 6px 14px; border-radius: 100px; }
+.old-way .why-card-tag { background: rgba(0,0,0,0.04); color: var(--text-muted); }
+.new-way .why-card-tag { background: var(--accent-soft); color: var(--accent); }
+.why-card h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 20px; }
+.old-way h3 { text-decoration: line-through; text-decoration-color: rgba(0,0,0,0.25); color: var(--text-muted); }
+.why-card ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.why-card li { font-size: 16px; line-height: 1.5; padding-left: 28px; position: relative; }
+.old-way li { color: var(--text-muted); } .old-way li::before { content: ''; position: absolute; left: 0; top: 10px; width: 14px; height: 2px; background: rgba(0,0,0,0.15); }
+.new-way li { color: var(--text-secondary); } .new-way li::before { content: ''; position: absolute; left: 3px; top: 5px; width: 7px; height: 12px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); }
+
+.timing { padding: 140px 40px; max-width: 1100px; margin: 0 auto; }
+.timing h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 64px; max-width: 650px; }
+.timing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.timing-card { padding: 36px; border-radius: 20px; background: #fff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04); }
+.timing-card .timing-icon { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: var(--accent); margin-bottom: 20px; line-height: 1; }
+.timing-card h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+.timing-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+
+.audience { padding: 140px 40px 200px; max-width: 900px; margin: 0 auto; text-align: center; }
+.audience h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 48px; }
+.audience-toggle { display: inline-flex; background: rgba(0,0,0,0.04); border-radius: 100px; padding: 4px; margin-bottom: 48px; }
+.toggle-btn { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; padding: 12px 32px; border: none; border-radius: 100px; cursor: pointer; transition: all 0.3s; background: transparent; color: var(--text-muted); }
+.toggle-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(91,138,138,0.25); }
+.audience-panels { position: relative; min-height: 280px; }
+.audience-panel { opacity: 0; transform: translateY(8px); transition: all 0.35s; pointer-events: none; position: absolute; top: 0; left: 0; right: 0; }
+.audience-panel.active { opacity: 1; transform: translateY(0); pointer-events: auto; position: relative; }
+.audience-items { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+.audience-item { padding: 28px; background: #fff; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.03); border: 1px solid var(--border); transition: all 0.3s; }
+.audience-item:hover { transform: translateY(-2px); box-shadow: 0 2px 8px rgba(91,138,138,0.12), 0 12px 32px rgba(91,138,138,0.10); border-color: var(--accent-light); background: rgba(91,138,138,0.03); }
+.audience-item:hover h4 { color: var(--accent); }
+.audience-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; transition: color 0.3s; }
+.audience-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+.cta-fade { height: 500px; background: linear-gradient(to bottom, var(--bg) 0%, rgba(230,242,240,0.8) 15%, rgba(160,190,186,0.6) 35%, rgba(60,80,78,0.5) 55%, rgba(22,34,33,0.8) 75%, #152221 100%); }
+.cta-section { background: #152221; color: #fff; text-align: center; padding: 80px 40px 120px; }
+.cta-content { max-width: 560px; margin: 0 auto; }
+.cta-content h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+.cta-content > p { font-size: 18px; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+.waitlist-form { display: flex; gap: 12px; max-width: 440px; margin: 0 auto 20px; }
+.waitlist-form input { flex: 1; font-family: 'Inter', sans-serif; font-size: 16px; padding: 16px 24px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; color: #fff; outline: none; transition: all 0.3s; }
+.waitlist-form input::placeholder { color: rgba(255,255,255,0.3); }
+.waitlist-form input:focus { border-color: var(--accent-light); background: rgba(255,255,255,0.1); }
+.waitlist-form button { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; padding: 16px 32px; background: var(--accent); color: #fff; border: none; border-radius: 100px; cursor: pointer; transition: all 0.3s; white-space: nowrap; box-shadow: 0 1px 3px rgba(91,138,138,0.3), 0 4px 16px rgba(91,138,138,0.3), 0 12px 40px rgba(91,138,138,0.15); }
+.waitlist-form button:hover { background: #4A7676; transform: translateY(-1px); box-shadow: 0 2px 6px rgba(91,138,138,0.35), 0 8px 24px rgba(91,138,138,0.35), 0 20px 56px rgba(91,138,138,0.2); }
+.waitlist-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+.role-selector { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
+.role-btn { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; padding: 12px 28px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; }
+.role-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
+.role-btn.selected { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(91,138,138,0.35); }
+.cta-note { font-size: 13px; color: rgba(255,255,255,0.3); }
+.form-success { display: none; font-size: 17px; color: var(--accent-light); font-weight: 500; }
+footer { background: #152221; border-top: 1px solid rgba(255,255,255,0.05); padding: 28px 40px; text-align: center; color: rgba(255,255,255,0.25); font-size: 13px; }
+
+@media (max-width: 768px) {
+  nav { padding: 10px 20px; gap: 16px; } nav a:not(.nav-cta) { display: none; }
+  .hero-split { flex-direction: column; gap: 4px; align-items: center; } .hero-split .word-x { display: none; }
+  .problem-columns { gap: 24px; }
+  .why-comparison { grid-template-columns: 1fr; }
+  .audience-items { grid-template-columns: 1fr; }
+  .timing-grid { grid-template-columns: 1fr; }
+  .timing, .audience { padding: 100px 24px; }
+  .waitlist-form { flex-direction: column; }
+  .role-selector { flex-direction: column; align-items: center; }
+  .cta-fade { height: 180px; }
+  .hero-scroll { display: none; }
+  .pin-content { padding: 80px 24px 24px; }
+  #sc-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .rev-cols { flex-direction: column; gap: 12px; }
+  .rev-arrow { transform: rotate(90deg); }
+  .pin-canvas { height: 300px; }
+  .why, .audience { padding: 100px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div id="gradient-bg"></div>
+<div id="progress"></div>
+<nav id="nav">
+  <div class="logo">co<span>/</span>own</div>
+  <a href="#s-problem">Problem</a>
+  <a href="#s-how">How it works</a>
+  <a href="for-builders.html">Builders</a>
+  <a href="for-creators.html">Creators</a>
+  <a href="#waitlist" class="nav-cta">Join waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-split">
+      <span class="word word-builders reveal">Builders</span>
+      <span class="word word-x reveal d1">&times;</span>
+      <span class="word word-creators reveal d2">Creators</span>
+    </div>
+    <p class="hero-tagline reveal d2">AI-powered revenue partnerships. No equity. No negotiations. Just aligned incentives.</p>
+    <div class="reveal d3"><a href="#waitlist" class="hero-cta">Join the waitlist <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- PROBLEM (GSAP pinned) -->
+<section class="pin-section" id="s-problem" style="background: transparent;">
+  <div class="pin-content" style="text-align:center;">
+    <div class="section-label" id="p1">The problem</div>
+    <h2 class="problem-statement pin-item" id="p2" style="margin-left:auto;margin-right:auto;">Great products die in silence.<br>Great audiences have <em>nothing to sell</em>.</h2>
+    <div class="problem-columns">
+      <div class="problem-col builder-col pin-item" id="p3a"><h3>Builders</h3><p>You shipped something real. Users love it. But growth flatlined at 50 users because you'd rather debug a memory leak than write a tweet thread. Marketing feels like performing. So you don't.</p></div>
+      <div class="problem-col creator-col pin-item" id="p3b"><h3>Creators</h3><p>You built an audience that trusts you. Thousands of people who'd buy what you recommend. But you're promoting other people's products for flat fees because you have nothing of your own to sell.</p></div>
+    </div>
+  </div>
+  <canvas class="pin-canvas" id="wave1"></canvas>
+</section>
+
+<!-- HOW IT WORKS (GSAP pinned) -->
+<section class="pin-section" id="s-how" style="background: transparent;">
+  <div class="pin-content">
+    <div class="section-label" id="h1">How it works</div>
+    <h2 class="solution-headline pin-item" id="h2a">Three steps.<br>No lawyers needed.</h2>
+    <div class="solution-steps">
+      <div class="vert-line pin-item" id="h3"></div>
+      <div class="step pin-item" id="h4"><div class="step-number">1</div><div class="step-text"><h3>Submit your product or audience</h3><p>Builders list their SaaS with metrics. Creators list their audience with demographics. Takes about 3 minutes.</p></div></div>
+      <div class="step pin-item" id="h5"><div class="step-number">2</div><div class="step-text"><h3>AI finds your match</h3><p>Our engine reads creator content, analyzes audience quality, evaluates product-market fit, and predicts which partnerships will actually generate revenue — before either side commits.</p></div></div>
+      <div class="step pin-item" id="h6"><div class="step-number">3</div><div class="step-text"><h3>Revenue flows both ways</h3><p>All payments process through Stripe Connect. Every dollar is tracked, verified, and split automatically. No hidden revenue. No invoicing. Both sides see exactly what's earned in real time.</p></div></div>
+    </div>
+  </div>
+  <canvas class="pin-canvas" id="wave2"></canvas>
+</section>
+
+<!-- SCORE (GSAP pinned) -->
+<section class="pin-section" id="s-score" style="background: transparent;">
+  <div class="pin-content">
+    <div class="section-label" id="sc-label">The AI engine</div>
+    <div class="pin-item sc-row" id="sc-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; width:100%;">
+      <div class="score-left">
+        <h2>Every match has a score. No negotiation.</h2>
+        <p>The AI reads creator content, analyzes audience quality, and predicts conversion. It determines a fair split based on the value each side brings. The model shows its reasoning. Take it or move on.</p>
+      </div>
+      <div>
+        <div class="score-card" id="scoreCard">
+          <div class="score-match-label">Match score</div>
+          <div class="score-number" id="scoreCounter">0%</div>
+          <div class="score-bars">
+            <div class="score-bar-row"><span class="score-bar-label">Audience</span><div class="score-bar-track"><div class="score-bar-fill bar-audience" data-width="92"></div></div><span class="score-bar-value">92</span></div>
+            <div class="score-bar-row"><span class="score-bar-label">Product fit</span><div class="score-bar-track"><div class="score-bar-fill bar-product" data-width="87"></div></div><span class="score-bar-value">87</span></div>
+            <div class="score-bar-row"><span class="score-bar-label">Reputation</span><div class="score-bar-track"><div class="score-bar-fill bar-values" data-width="94"></div></div><span class="score-bar-value">94</span></div>
+            <div class="score-bar-row"><span class="score-bar-label">Revenue est.</span><div class="score-bar-track"><div class="score-bar-fill bar-revenue" data-width="83"></div></div><span class="score-bar-value">83</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <canvas class="pin-canvas" id="wave3"></canvas>
+</section>
+
+<!-- REVENUE + REPUTATION (normal scroll — breathes after the pinned score section) -->
+<div style="background: transparent;" id="s-revenue">
+  <div style="padding: 140px 40px; max-width: 900px; margin: 0 auto;">
+    <div class="section-label reveal">The flywheel</div>
+    <h2 class="reveal d1" style="font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 24px; max-width: 650px;">Perform well. Get rewarded.<br>Repeat.</h2>
+    <p class="reveal d2" style="font-size: 17px; color: var(--text-secondary); line-height: 1.7; max-width: 560px; margin-bottom: 56px;">Your reputation score builds with every partnership. Higher scores unlock better matches, better splits, and priority access. The AI doesn't just match you once — it rewards you for delivering.</p>
+    <div class="revenue-example reveal d3">
+      <div class="rev-header">Creator portfolio example</div>
+      <div class="rev-cols">
+        <div class="rev-col">
+          <div class="rev-col-label">Starting</div>
+          <div class="rev-row"><span class="rev-label">5 products &times; $2K avg MRR</span><span class="rev-value">$10,000/mo</span></div>
+          <div class="rev-row"><span class="rev-label">Your 25% share</span><span class="rev-value rev-accent">$2,500/mo</span></div>
+        </div>
+        <div class="rev-arrow">&rarr;</div>
+        <div class="rev-col">
+          <div class="rev-col-label">Scaled</div>
+          <div class="rev-row"><span class="rev-label">Products grow to $20K avg</span><span class="rev-value">$100,000/mo</span></div>
+          <div class="rev-row rev-highlight"><span class="rev-label">Your 25% share</span><span class="rev-value rev-accent">$25,000/mo</span></div>
+        </div>
+      </div>
+      <div class="rev-footer">Your share scales with every product you help grow — and your reputation score unlocks higher splits over time.</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY (normal) -->
+<div style="background: transparent;" id="s-why">
+  <div class="why">
+    <div class="section-label reveal">Why this model</div>
+    <h2 class="reveal d1">Equity sharing is broken.<br>This isn't that.</h2>
+    <div class="why-comparison">
+      <div class="why-card old-way reveal d2"><div class="why-card-tag">Equity deals</div><h3>Giving away your company</h3><ul><li>Lawyers, cap tables, months of negotiation</li><li>Misaligned incentives after the ink dries</li><li>Impossible to unwind when it stops working</li><li>Creator has no real accountability</li></ul></div>
+      <div class="why-card new-way reveal d3"><div class="why-card-tag">Revenue partnerships</div><h3>Sharing what you earn together</h3><ul><li>Live in 48 hours. No legal fees.</li><li>Both sides earn exactly when users pay</li><li>Either party can walk away, anytime</li><li>Your reputation score rewards performance with better deals</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY NOW (normal) -->
+<div style="background: transparent;" id="s-timing">
+  <div class="timing">
+    <div class="section-label reveal">Why now</div>
+    <h2 class="reveal d1">Three shifts created<br>this moment.</h2>
+    <div class="timing-grid">
+      <div class="timing-card reveal d1">
+        <div class="timing-icon">10x</div>
+        <h3>Product supply exploded</h3>
+        <p>AI-assisted development means anyone can build a functional SaaS in a weekend. The bottleneck isn't building anymore. It's distribution. Great products are everywhere. Growth partners are scarce.</p>
+      </div>
+      <div class="timing-card reveal d2">
+        <div class="timing-icon">#own</div>
+        <h3>Creators want ownership</h3>
+        <p>Flat-fee sponsorships expire in 48 hours. Affiliate commissions get slashed overnight. Creators are actively seeking equity and revenue-sharing arrangements — but most deals require agencies and lawyers.</p>
+      </div>
+      <div class="timing-card reveal d3">
+        <div class="timing-icon">0%</div>
+        <h3>The middle is empty</h3>
+        <p>Enterprise platforms serve funded startups with agency-represented creators. Affiliate networks serve everyone else with commoditized links. Nobody serves the indie builder + mid-tier creator directly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIENCE (normal) -->
+<div style="background: transparent;">
+  <div class="audience">
+    <div class="section-label reveal">Who it's for</div>
+    <h2 class="reveal d1">Two sides, one platform</h2>
+    <div class="audience-toggle reveal d2">
+      <button class="toggle-btn active" onclick="switchPanel('builders')">For builders</button>
+      <button class="toggle-btn" onclick="switchPanel('creators')">For creators</button>
+    </div>
+    <div class="audience-panels reveal d3">
+      <div class="audience-panel active" id="panel-builders"><div class="audience-items">
+        <div class="audience-item"><h4>Skip the marketing grind</h4><p>A creator with 50K followers who genuinely loves your product will outperform any ad campaign you'd run yourself.</p></div>
+        <div class="audience-item"><h4>Pay for results, not promises</h4><p>Revenue share means you only pay when money comes in. Zero upfront cost. Zero risk.</p></div>
+        <div class="audience-item"><h4>Keep building what matters</h4><p>Stay in your IDE. Your partner handles the audience. You handle the product.</p></div>
+        <div class="audience-item"><h4>AI-powered matching</h4><p>No cold DMs, no pitching. The AI finds creators whose audience actually needs what you built — and your reputation score gets you better matches over time.</p></div>
+      </div></div>
+      <div class="audience-panel" id="panel-creators"><div class="audience-items">
+        <div class="audience-item"><h4>Own your revenue stream</h4><p>Stop trading posts for flat fees. Get ongoing revenue from every user who converts.</p></div>
+        <div class="audience-item"><h4>Products you'd actually use</h4><p>We match you with tools that fit your audience. Authentic recommendations.</p></div>
+        <div class="audience-item"><h4>Your score is your leverage</h4><p>Every partnership builds your reputation score. Higher scores unlock better products, better splits, and priority matching.</p></div>
+        <div class="audience-item"><h4>No lock-in</h4><p>Not working? Walk away. No contracts, no minimums.</p></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-fade"></div>
+<section class="cta-section" id="waitlist">
+  <div class="cta-content">
+    <h2 class="reveal">Be first.</h2>
+    <p class="reveal d1">We're matching the first cohort of builders and creators now.</p>
+    <div class="role-selector reveal d2">
+      <button type="button" class="role-btn" onclick="selectRole(this, 'builder')">I'm a builder</button>
+      <button type="button" class="role-btn" onclick="selectRole(this, 'creator')">I'm a creator</button>
+    </div>
+    <form class="waitlist-form reveal d2" id="waitlistForm" onsubmit="return submitWaitlist(event)">
+      <input type="hidden" name="role" id="roleInput" value="">
+      <input type="email" name="email" placeholder="your@email.com" required>
+      <button type="submit" id="submitBtn">Join</button>
+    </form>
+    <div class="form-success" id="formSuccess">You're in. We'll be in touch.</div>
+    <div class="cta-note reveal d3">Launching Q2 2026</div>
+  </div>
+</section>
+<footer>co/own &mdash; 2026</footer>
+
+<script>
+// ===== WAVE CANVAS =====
+// Shared offscreen canvas — draw once, copy to all 3
+const waveTargets = ['wave1','wave2','wave3'].map(id => {
+  const c = document.getElementById(id); return c ? { c, ctx: c.getContext('2d') } : null;
+}).filter(Boolean);
+const offC = document.createElement('canvas');
+const offCtx = offC.getContext('2d');
+let waveW = 0, waveH = 0, waveT = 0;
+const hue=180, amp=24, layers=12, sp=2.3, ps=1.4;
+function waveResize() {
+  const ref = waveTargets[0]?.c; if(!ref) return;
+  const d = Math.min(devicePixelRatio||1, 2);
+  waveW = ref.clientWidth; waveH = ref.clientHeight;
+  if(!waveW) return;
+  offC.width = waveW * d; offC.height = waveH * d;
+  offCtx.setTransform(d,0,0,d,0,0);
+  waveTargets.forEach(t => { t.c.width = waveW*d; t.c.height = waveH*d; t.ctx.setTransform(d,0,0,d,0,0); });
+}
+function waveDraw() {
+  if(!waveW) waveResize();
+  if(!waveW) { requestAnimationFrame(waveDraw); return; }
+  waveT += 0.004;
+  offCtx.clearRect(0,0,waveW,waveH);
+  for(let L=0;L<layers;L++){const p=L/(layers-1),yB=waveH*(0.35+p*0.55),a=0.25+p*0.35,hu=hue+L*8,lum=50+p*14,cols=Math.ceil(waveW/sp);let px,py;
+  for(let i=0;i<=cols;i++){const x=(i/cols)*waveW,nx=i/cols,y=yB+Math.sin(nx*10+waveT+L*0.6)*amp+Math.sin(nx*7-waveT*0.5+L*0.4)*(amp*0.4)+Math.cos(nx*14+waveT*0.3+L*0.8)*(amp*0.2);
+  offCtx.beginPath();offCtx.arc(x,y,ps+(p*0.6),0,Math.PI*2);offCtx.fillStyle=`hsla(${hu},70%,${lum}%,${a*0.75})`;offCtx.fill();
+  if(i>0){offCtx.beginPath();offCtx.moveTo(px,py);offCtx.lineTo(x,y);offCtx.strokeStyle=`hsla(${hu},70%,${lum}%,${a*0.4})`;offCtx.lineWidth=0.8;offCtx.stroke();}
+  if(L>0&&i%2===0){const pp=(L-1)/(layers-1),pyb=waveH*(0.35+pp*0.55),pvy=pyb+Math.sin(nx*10+waveT+(L-1)*0.6)*amp+Math.sin(nx*7-waveT*0.5+(L-1)*0.4)*(amp*0.4)+Math.cos(nx*14+waveT*0.3+(L-1)*0.8)*(amp*0.2);offCtx.beginPath();offCtx.moveTo(x,pvy);offCtx.lineTo(x,y);offCtx.strokeStyle=`hsla(${hu},65%,${lum}%,${a*0.22})`;offCtx.lineWidth=0.6;offCtx.stroke();}
+  px=x;py=y;}}
+  // Copy to all visible canvases
+  waveTargets.forEach(t => { t.ctx.clearRect(0,0,waveW,waveH); t.ctx.drawImage(offC,0,0,waveW,waveH); });
+  requestAnimationFrame(waveDraw);
+}
+waveResize(); waveDraw();
+window.addEventListener('resize', waveResize);
+
+// ===== GSAP SCROLL-PINNED SECTIONS =====
+gsap.registerPlugin(ScrollTrigger);
+
+// ===== LABEL MORPH: centered + slightly larger → natural position (no fade) =====
+// Calculate x offset to center a label horizontally in viewport
+function xToCenter(id) {
+  const el = document.getElementById(id);
+  const r = el.getBoundingClientRect();
+  return window.innerWidth / 2 - r.left - r.width / 2;
+}
+
+// Pre-calculate offsets (runs after DOM layout)
+const h1X = xToCenter('h1');
+const scX = xToCenter('sc-label');
+
+// Set initial states BEFORE scroll triggers
+gsap.set("#p1", { scale: 1.3, letterSpacing: "7px", y: "12vh" });
+gsap.set("#h1", { scale: 1.3, letterSpacing: "7px", y: "12vh", x: h1X });
+gsap.set("#sc-label", { scale: 1.3, letterSpacing: "7px", y: "12vh", x: scX });
+
+// Problem section (label centered via parent — x stays 0)
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#s-problem",
+    start: "top top",
+    end: "+=400%",
+    pin: true,
+    scrub: 0.8,
+    anticipatePin: 1,
+  }
+})
+.to("#p1", { scale: 1, letterSpacing: "4px", y: 0, duration: 2.5, ease: "power2.inOut" }, 0)
+.to("#p2", { opacity: 1, y: 0, duration: 1 }, 2.5)
+.to("#p3a", { opacity: 1, y: 0, duration: 1 }, 4)
+.to("#p3b", { opacity: 1, y: 0, duration: 1 }, 5.2);
+
+// How It Works (label slides from center to left)
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#s-how",
+    start: "top top",
+    end: "+=450%",
+    pin: true,
+    scrub: 0.8,
+    anticipatePin: 1,
+  }
+})
+.to("#h1", { scale: 1, letterSpacing: "4px", y: 0, x: 0, duration: 2.5, ease: "power2.inOut" }, 0)
+.to("#h2a", { opacity: 1, y: 0, duration: 1 }, 2.5)
+.to("#h3", { opacity: 1, y: 0, duration: 0.5 }, 3.2)
+.to("#h4", { opacity: 1, y: 0, duration: 1 }, 3.2)
+.to("#h5", { opacity: 1, y: 0, duration: 1 }, 4.5)
+.to("#h6", { opacity: 1, y: 0, duration: 1 }, 5.8);
+
+// Score (label slides from center to left above grid)
+let scoreAnimated = false;
+const scoreTL = gsap.timeline({
+  scrollTrigger: {
+    trigger: "#s-score",
+    start: "top top",
+    end: "+=280%",
+    pin: true,
+    scrub: 0.8,
+    anticipatePin: 1,
+    onLeaveBack: () => resetScore(),
+  }
+});
+scoreTL.to("#sc-label", { scale: 1, letterSpacing: "4px", y: 0, x: 0, duration: 2.5, ease: "power2.inOut" }, 0);
+scoreTL.to("#sc-grid", { opacity: 1, y: 0, duration: 1.2, onStart: () => animateScore(), onReverseComplete: () => resetScore() }, 2.5);
+
+// Score elements start hidden
+gsap.set("#sc-grid", { opacity: 0, y: 30 });
+
+function animateScore() {
+  if (scoreAnimated) return; scoreAnimated = true;
+  const el = document.getElementById('scoreCounter');
+  const bars = document.querySelectorAll('.score-bar-fill');
+  const start = performance.now();
+  function tick(now) { const p = Math.min((now-start)/1500,1); el.textContent = Math.round(89*(1-Math.pow(1-p,3)))+'%'; if(p<1) requestAnimationFrame(tick); }
+  requestAnimationFrame(tick);
+  setTimeout(() => bars.forEach(b => { b.style.width = b.dataset.width+'%'; }), 200);
+}
+function resetScore() {
+  scoreAnimated = false;
+  document.getElementById('scoreCounter').textContent = '0%';
+  document.querySelectorAll('.score-bar-fill').forEach(b => { b.style.width = '0%'; });
+}
+
+// ===== SCROLL-LINKED GRADIENT WASH =====
+const gradEl = document.getElementById('gradient-bg');
+// Horizontal (90deg = left→right), 3-stop gradients for richer color
+// [scrollProgress, leftColor, midColor, rightColor] — all rgb arrays + opacity
+const gradStops = [
+  { at: 0,    cL: [230,245,242], oL: 0.10,  cM: [240,250,248], oM: 0.06,  cR: [220,240,236], oR: 0.08 },  // barely-there teal mist
+  { at: 0.15, cL: [215,235,232], oL: 0.10,  cM: [228,242,240], oM: 0.06,  cR: [200,228,224], oR: 0.12 },  // soft teal
+  { at: 0.35, cL: [190,218,215], oL: 0.12,  cM: [210,230,228], oM: 0.08,  cR: [175,208,204], oR: 0.14 },  // teal wash
+  { at: 0.55, cL: [200,222,220], oL: 0.10,  cM: [215,232,230], oM: 0.06,  cR: [185,212,208], oR: 0.12 },  // mid teal
+  { at: 0.72, cL: [175,200,198], oL: 0.12,  cM: [190,210,208], oM: 0.08,  cR: [160,190,186], oR: 0.10 },  // deeper teal
+  { at: 0.88, cL: [120,148,146], oL: 0.12,  cM: [110,138,136], oM: 0.10,  cR: [100,128,126], oR: 0.12 },  // muted dark teal
+  { at: 1,    cL: [24,36,35],    oL: 0.40,  cM: [20,30,30],    oM: 0.45,  cR: [16,26,25],    oR: 0.50 },  // dark teal-black
+];
+function lerpGrad(p) {
+  let i = 0;
+  for (let j = 1; j < gradStops.length; j++) { if (gradStops[j].at >= p) { i = j - 1; break; } if (j === gradStops.length - 1) i = j - 1; }
+  const a = gradStops[i], b = gradStops[i + 1];
+  const t = Math.min(1, Math.max(0, (p - a.at) / (b.at - a.at)));
+  const ease = t * t * (3 - 2 * t); // smoothstep
+  const lerp3 = (ac, bc) => ac.map((v, k) => Math.round(v + (bc[k] - v) * ease));
+  const lerpO = (ao, bo) => ao + (bo - ao) * ease;
+  const rL = lerp3(a.cL, b.cL), rM = lerp3(a.cM, b.cM), rR = lerp3(a.cR, b.cR);
+  const oL = lerpO(a.oL, b.oL), oM = lerpO(a.oM, b.oM), oR = lerpO(a.oR, b.oR);
+  return `linear-gradient(90deg, rgba(${rL},${oL.toFixed(3)}) 0%, rgba(${rM},${oM.toFixed(3)}) 50%, rgba(${rR},${oR.toFixed(3)}) 100%)`;
+}
+let gradRAF = null;
+function updateGrad() {
+  const p = window.pageYOffset / Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  gradEl.style.background = lerpGrad(p);
+  gradRAF = null;
+}
+window.addEventListener('scroll', () => { if (!gradRAF) gradRAF = requestAnimationFrame(updateGrad); }, { passive: true });
+updateGrad(); // initial
+
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll', () => {
+  document.getElementById('progress').style.width = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
+}, { passive: true });
+
+// ===== HERO + NORMAL REVEALS =====
+const revObs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); else e.target.classList.remove('vis'); }); }, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ===== NAV DARK MODE =====
+const navEl = document.getElementById('nav'), darkEl = document.querySelector('.cta-fade');
+if (darkEl) window.addEventListener('scroll', () => { navEl.classList.toggle('dark-mode', navEl.getBoundingClientRect().bottom > darkEl.getBoundingClientRect().top); }, { passive: true });
+
+// ===== AUDIENCE TOGGLE =====
+function switchPanel(w) {
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.audience-panel').forEach(p=>p.classList.remove('active'));
+  if(w==='builders'){document.querySelectorAll('.toggle-btn')[0].classList.add('active');document.getElementById('panel-builders').classList.add('active');}
+  else{document.querySelectorAll('.toggle-btn')[1].classList.add('active');document.getElementById('panel-creators').classList.add('active');}
+}
+
+// ===== ROLE SELECTOR =====
+function selectRole(btn, role) {
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('roleInput').value = role;
+}
+
+// ===== WAITLIST =====
+async function submitWaitlist(e) {
+  e.preventDefault(); const form=document.getElementById('waitlistForm'),btn=document.getElementById('submitBtn');
+  const role = document.getElementById('roleInput').value;
+  const email = form.querySelector('input[type="email"]').value;
+  btn.disabled=true;btn.textContent='...';
+  try{const r=await fetch('/command/api/co-own/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,role,source:'co-own-v3'})});
+  if(r.ok){form.style.display='none';document.querySelector('.role-selector').style.display='none';document.getElementById('formSuccess').style.display='block';}else{btn.textContent='Try again';btn.disabled=false;}}
+  catch(e){btn.textContent='Try again';btn.disabled=false;}return false;
+}
+
+document.querySelectorAll('nav a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});});
+</script>
+</body>
+</html>

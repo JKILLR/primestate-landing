@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Co-Own — Where builders find their growth partner</title>
+<meta name="description" content="The marketplace where indie software builders and content creators form revenue-sharing partnerships. Join the waitlist.">
+<meta property="og:title" content="Co-Own — Where builders find their growth partner">
+<meta property="og:description" content="The marketplace where indie software builders and content creators form revenue-sharing partnerships. Join the waitlist.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://primestate.dev/co-own/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Co-Own — Where builders find their growth partner">
+<meta name="twitter:description" content="Revenue-sharing partnerships for indie builders and content creators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   CO-OWN V2 — THE SIGNAL
+   Premium fintech aesthetic
+   ======================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-root: #060606;
+  --bg-surface: #111111;
+  --bg-elevated: #181818;
+  --border: rgba(255,255,255,0.06);
+  
+  --text-primary: #E8E4DD;
+  --text-secondary: #9A968E;
+  --text-muted: #5E5B55;
+  
+  --accent: #FF6B35;
+  --accent-hover: #FF8255;
+  --money: #4ADE80;
+  
+  --section-pad: clamp(160px, 20vh, 200px);
+  --container: 1080px;
+  
+  --spotlight-x: 50%;
+  --spotlight-y: 50%;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-root);
+  color: var(--text-primary);
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ========================================
+   Animated Background Layers
+   ======================================== */
+
+.bg-layer-orbs {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.7;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  top: -10%;
+  left: -5%;
+  background: rgba(255, 107, 53, 0.07);
+  animation: drift1 35s;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  top: 30%;
+  right: -10%;
+  background: rgba(255, 162, 53, 0.05);
+  animation: drift2 40s;
+}
+
+.orb-3 {
+  width: 550px;
+  height: 550px;
+  bottom: -15%;
+  left: 20%;
+  background: rgba(74, 222, 128, 0.04);
+  animation: drift3 38s;
+}
+
+@keyframes drift1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8%, 6%) scale(1.1); }
+}
+
+@keyframes drift2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-6%, -8%) scale(1.08); }
+}
+
+@keyframes drift3 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, -7%) scale(1.05); }
+}
+
+.bg-layer-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.04"/></svg>');
+  background-repeat: repeat;
+  opacity: 0.8;
+}
+
+.bg-layer-spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(300px at var(--spotlight-x) var(--spotlight-y), rgba(255,255,255,0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+body:hover .bg-layer-spotlight {
+  opacity: 1;
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+
+h1 {
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+h1 strong {
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: inline-block;
+}
+
+/* ========================================
+   Layout
+   ======================================== */
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
+
+section {
+  padding: var(--section-pad) 0;
+  position: relative;
+}
+
+/* ========================================
+   Connecting Line (Signature Element)
+   ======================================== */
+
+.connecting-line {
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 200px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.connecting-line svg {
+  width: 1px;
+  height: 100%;
+}
+
+.connecting-line-1 {
+  top: -100px;
+}
+
+.connecting-line-2 {
+  top: -100px;
+}
+
+/* ========================================
+   Nav
+   ======================================== */
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 0;
+  transition: background 0.3s, backdrop-filter 0.3s;
+}
+
+nav.scrolled {
+  background: rgba(6, 6, 6, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-cta {
+  padding: 10px 20px;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.nav-cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.25);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-outline:hover {
+  border-color: rgba(255, 107, 53, 0.4);
+  background: rgba(255, 107, 53, 0.05);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   Glass card
+   ======================================== */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 56px 48px;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 107, 53, 0.2);
+  box-shadow: 0 24px 60px rgba(255, 107, 53, 0.08);
+}
+
+/* ========================================
+   Scroll reveal animations
+   ======================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+
+/* ========================================
+   SECTION 1: Hero
+   ======================================== */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 180px 0 var(--section-pad);
+  position: relative;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+}
+
+.hero h1 {
+  margin-bottom: 32px;
+}
+
+.hero-sub {
+  font-size: clamp(18px, 2vw, 22px);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 auto 56px;
+  font-weight: 400;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 80px;
+}
+
+.hero-nodes {
+  opacity: 0.4;
+}
+
+/* ========================================
+   SECTION 2: The Problem
+   ======================================== */
+
+#problem {
+  position: relative;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.problem-col h3 {
+  margin-bottom: 24px;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.problem-col p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 17px;
+}
+
+.problem-divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.2;
+  margin-top: -20px;
+}
+
+/* ========================================
+   SECTION 3: How It Works
+   ======================================== */
+
+#how {
+  position: relative;
+}
+
+.steps-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.step-card {
+  text-align: center;
+}
+
+.step-number-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+.step-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.step-card h3 {
+  margin-bottom: 16px;
+  font-size: 22px;
+}
+
+.step-card p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* ========================================
+   SECTION 4: The Algorithm
+   ======================================== */
+
+#algorithm {
+  position: relative;
+}
+
+.algo-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.algo-text h2 {
+  margin-bottom: 24px;
+}
+
+.algo-text > p {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.algo-visual {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px;
+}
+
+.algo-side {
+  margin-bottom: 32px;
+}
+
+.algo-side:last-of-type {
+  margin-bottom: 36px;
+}
+
+.algo-side-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.score-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.score-bar-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  width: 0;
+  transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.score-bar-fill.builder {
+  background: linear-gradient(90deg, #FF6B35, #FFB347);
+}
+
+.score-bar-fill.creator {
+  background: linear-gradient(90deg, #9A968E 0%, #C4BFAF 100%);
+}
+
+.algo-result {
+  text-align: center;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.algo-result-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.algo-result-value {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--money);
+  font-variant-numeric: tabular-nums;
+}
+
+.algo-footer {
+  text-align: center;
+  margin-top: 32px;
+  color: var(--text-muted);
+  font-size: 16px;
+  font-style: italic;
+}
+
+/* ========================================
+   SECTION 5: Why Revenue Sharing
+   ======================================== */
+
+#model {
+  position: relative;
+}
+
+.compare-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.compare-card {
+  padding: 48px 36px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.compare-card:hover {
+  transform: translateY(-4px);
+}
+
+.compare-card.highlight {
+  border-color: rgba(255, 107, 53, 0.3);
+  background: rgba(255, 107, 53, 0.04);
+  position: relative;
+  box-shadow: 0 0 60px rgba(255, 107, 53, 0.12);
+}
+
+.compare-card.highlight::after {
+  content: 'RECOMMENDED';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 6px 16px;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.compare-card h3 {
+  font-size: 18px;
+  margin-bottom: 28px;
+  color: var(--text-primary);
+}
+
+.compare-list {
+  list-style: none;
+}
+
+.compare-list li {
+  padding: 12px 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.compare-list li:last-child {
+  border-bottom: none;
+}
+
+.compare-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.compare-icon.neutral { color: var(--text-muted); }
+.compare-icon.negative { color: #ef4444; }
+.compare-icon.positive { color: var(--money); }
+
+.compare-footer {
+  text-align: center;
+  margin-top: 48px;
+  color: var(--text-secondary);
+  font-size: 17px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+/* ========================================
+   SECTION 6: Value Props (Tabbed)
+   ======================================== */
+
+#value {
+  position: relative;
+}
+
+.value-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.value-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 100px;
+  padding: 6px;
+  margin-bottom: 64px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--border);
+}
+
+.value-tab {
+  padding: 12px 32px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: all 0.3s;
+}
+
+.value-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.value-tab:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+.value-panel {
+  display: none;
+}
+
+.value-panel.active {
+  display: block;
+}
+
+.value-panel h2 {
+  text-align: center;
+  margin-bottom: 64px;
+  font-size: clamp(28px, 3.5vw, 40px);
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.value-item {
+  padding: 40px;
+}
+
+.value-item h3 {
+  font-size: 19px;
+  margin-bottom: 12px;
+}
+
+.value-item p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* ========================================
+   SECTION 7: The Math
+   ======================================== */
+
+#math {
+  position: relative;
+}
+
+.math-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.math-text h2 {
+  margin-bottom: 24px;
+}
+
+.math-text > p {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.math-visual {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px;
+}
+
+.math-params {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  letter-spacing: 0.02em;
+}
+
+.math-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.math-row:last-child {
+  border-bottom: none;
+}
+
+.math-period {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.math-value {
+  font-size: 32px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.math-value .mono {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.math-row:nth-child(1) .math-value { color: var(--text-secondary); font-size: 28px; }
+.math-row:nth-child(2) .math-value { color: var(--text-primary); font-size: 30px; }
+.math-row:nth-child(3) .math-value { color: #C4BFAF; font-size: 32px; }
+.math-row:nth-child(4) .math-value { color: var(--money); font-size: 42px; }
+
+.math-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 24px;
+  max-width: 200px;
+}
+
+.math-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.math-row:nth-child(1) .math-bar-fill { background: var(--text-muted); }
+.math-row:nth-child(2) .math-bar-fill { background: #FF6B35; }
+.math-row:nth-child(3) .math-bar-fill { background: #FFB347; }
+.math-row:nth-child(4) .math-bar-fill { background: var(--money); }
+
+.math-footer {
+  margin-top: 28px;
+  font-size: 17px;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ========================================
+   SECTION 8: FAQ
+   ======================================== */
+
+#faq {
+  position: relative;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 32px 0;
+}
+
+.faq-item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.faq-question {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.faq-question:hover {
+  color: var(--accent);
+}
+
+.faq-chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  transition: transform 0.3s, color 0.2s;
+}
+
+.faq-item.open .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 400px;
+  padding-top: 20px;
+}
+
+.faq-answer p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* ========================================
+   SECTION 9: Final CTA
+   ======================================== */
+
+.final-cta {
+  text-align: center;
+  position: relative;
+  padding: var(--section-pad) 0 120px;
+}
+
+.final-cta h2 {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.final-cta > .container > p {
+  color: var(--text-secondary);
+  font-size: 20px;
+  max-width: 640px;
+  margin: 0 auto 56px;
+  line-height: 1.7;
+  position: relative;
+}
+
+.waitlist-form {
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.waitlist-type {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 12px;
+}
+
+.waitlist-type label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.waitlist-type input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.waitlist-type input[type="radio"]:checked {
+  border-color: var(--accent);
+}
+
+.waitlist-type input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.waitlist-input-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 6px 6px 28px;
+  align-items: center;
+  transition: border-color 0.25s;
+}
+
+.waitlist-input-row:focus-within {
+  border-color: rgba(255, 107, 53, 0.4);
+}
+
+.waitlist-input-row input[type="email"] {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  padding: 12px 0;
+}
+
+.waitlist-input-row input[type="email"]::placeholder {
+  color: var(--text-muted);
+}
+
+.waitlist-submit {
+  padding: 14px 28px;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.waitlist-submit:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.waitlist-note {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.waitlist-success {
+  display: none;
+  text-align: center;
+  padding: 48px;
+}
+
+.waitlist-success.show {
+  display: block;
+}
+
+.waitlist-success h3 {
+  color: var(--money);
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.waitlist-success p {
+  color: var(--text-secondary);
+  font-size: 17px;
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+
+footer {
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+footer p {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --section-pad: 120px;
+  }
+
+  .problem-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .algo-layout {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .compare-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .value-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .math-layout {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .waitlist-input-row {
+    flex-direction: column;
+    border-radius: 16px;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .waitlist-submit {
+    width: 100%;
+    padding: 14px;
+    border-radius: 100px;
+  }
+
+  .glass-card {
+    padding: 40px 32px;
+  }
+
+  .connecting-line {
+    display: none;
+  }
+
+  .math-bar {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --section-pad: 80px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .glass-card {
+    padding: 32px 24px;
+  }
+
+  .score-label {
+    width: 100px;
+    font-size: 13px;
+  }
+
+  .algo-visual {
+    padding: 32px 24px;
+  }
+
+  .math-visual {
+    padding: 32px 24px;
+  }
+
+  .compare-card {
+    padding: 36px 28px;
+  }
+
+  .value-item {
+    padding: 32px 24px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Layers -->
+<div class="bg-layer-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="bg-layer-grain"></div>
+<div class="bg-layer-spotlight"></div>
+
+<!-- ==========================================
+     NAV
+     ========================================== -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">Co-Own</a>
+    <a href="#waitlist" class="nav-cta">Join the Waitlist</a>
+  </div>
+</nav>
+
+<!-- ==========================================
+     SECTION 1: HERO
+     ========================================== -->
+<section class="hero" id="hero">
+  <div class="container hero-content">
+    <h1 class="reveal">Where builders find their<br><strong>growth partner.</strong></h1>
+    <p class="hero-sub reveal reveal-delay-1">The marketplace where indie software builders and content creators form revenue-sharing partnerships. You build it. They grow it. Everyone owns the upside.</p>
+    <div class="hero-buttons reveal reveal-delay-2">
+      <a href="#waitlist" class="btn btn-primary">I'm a Builder</a>
+      <a href="#waitlist" class="btn btn-outline">I'm a Creator</a>
+    </div>
+    <div class="hero-nodes reveal reveal-delay-3" aria-hidden="true">
+      <svg viewBox="0 0 200 40" width="200" height="40">
+        <line x1="30" y1="20" x2="170" y2="20" stroke="rgba(255,107,53,0.3)" stroke-width="1" stroke-dasharray="4 4">
+          <animate attributeName="stroke-dashoffset" from="8" to="0" dur="2s" repeatCount="indefinite"/>
+        </line>
+        <circle cx="30" cy="20" r="5" fill="none" stroke="rgba(255,107,53,0.5)" stroke-width="1.5"/>
+        <circle cx="30" cy="20" r="2" fill="#FF6B35"/>
+        <circle cx="170" cy="20" r="5" fill="none" stroke="rgba(154,150,142,0.5)" stroke-width="1.5"/>
+        <circle cx="170" cy="20" r="2" fill="#9A968E"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Connecting Line 1 -->
+<svg class="connecting-line connecting-line-1" style="top: -100px;">
+  <line x1="0.5" y1="0" x2="0.5" y2="200" stroke="rgba(255,107,53,0.15)" stroke-width="1" stroke-dasharray="4 2"/>
+  <circle cx="0.5" cy="100" r="3" fill="#FF6B35" opacity="0.6">
+    <animate attributeName="cy" from="0" to="200" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>
+
+<!-- ==========================================
+     SECTION 2: THE PROBLEM
+     ========================================== -->
+<section id="problem">
+  <div class="container">
+    <div class="section-label reveal">THE GAP</div>
+    <div class="problem-grid">
+      <div class="problem-col reveal">
+        <h3>You can build anything.<br>But nobody knows it exists.</h3>
+        <p>Anyone can ship a product in a weekend now. The tools are there. The frameworks are there. AI writes half the code. But distribution? That's still the hardest problem in tech. You don't need more features. You need someone who already has the audience.</p>
+      </div>
+      <div class="problem-col reveal reveal-delay-1">
+        <h3>You promote tools for flat fees.<br>Then watch the founders get rich.</h3>
+        <p>Brand deals expire in 48 hours. Affiliate rates get slashed without warning. You're trading your influence for pennies on the dollar while the products you promote hit millions in ARR. You don't need another sponsorship. You need to own what you promote.</p>
+      </div>
+      <div class="problem-divider reveal reveal-delay-2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 3: HOW IT WORKS
+     ========================================== -->
+<section id="how">
+  <div class="container">
+    <div class="steps-header">
+      <div class="section-label reveal">HOW IT WORKS</div>
+      <h2 class="reveal">Three steps to shared growth.</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="glass-card step-card reveal">
+        <div class="step-number-wrap"><span class="step-number">01</span></div>
+        <h3>List your product</h3>
+        <p>Connect your Stripe account. Your revenue is verified automatically. Describe what you're building and the kind of creator who'd be the right fit. Real data, no faking it.</p>
+      </div>
+      <div class="glass-card step-card reveal reveal-delay-1">
+        <div class="step-number-wrap"><span class="step-number">02</span></div>
+        <h3>Find your match</h3>
+        <p>Our algorithm analyzes both sides — your product metrics, their audience data — and suggests a fair revenue-share percentage. No negotiation. No agencies. No back-and-forth.</p>
+      </div>
+      <div class="glass-card step-card reveal reveal-delay-2">
+        <div class="step-number-wrap"><span class="step-number">03</span></div>
+        <h3>Grow together</h3>
+        <p>The creator promotes authentically because they own the upside. Revenue flows through the platform with automatic splits. Full transparency for both sides. Always.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Connecting Line 2 -->
+<svg class="connecting-line connecting-line-2" style="top: -100px;">
+  <line x1="0.5" y1="0" x2="0.5" y2="200" stroke="rgba(255,107,53,0.15)" stroke-width="1" stroke-dasharray="4 2"/>
+  <circle cx="0.5" cy="100" r="3" fill="#FF6B35" opacity="0.6">
+    <animate attributeName="cy" from="0" to="200" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+  </circle>
+</svg>
+
+<!-- ==========================================
+     SECTION 4: THE ALGORITHM
+     ========================================== -->
+<section id="algorithm">
+  <div class="container">
+    <div class="algo-layout">
+      <div class="algo-text reveal">
+        <div class="section-label">THE ENGINE</div>
+        <h2>The algorithm that replaces negotiation.</h2>
+        <p>Every builder and creator gets a score based on verified data. The platform calculates a fair split automatically — no awkward conversations, no lowball offers, no guesswork.</p>
+      </div>
+      <div class="algo-visual reveal reveal-delay-1" id="algoVisual">
+        <div class="algo-side">
+          <div class="algo-side-label">Builder Score</div>
+          <div class="score-row">
+            <span class="score-label">MRR Growth</span>
+            <div class="score-bar-track"><div class="score-bar-fill builder" data-width="72%"></div></div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Retention</span>
+            <div class="score-bar-track"><div class="score-bar-fill builder" data-width="88%"></div></div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Product Quality</span>
+            <div class="score-bar-track"><div class="score-bar-fill builder" data-width="65%"></div></div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Track Record</span>
+            <div class="score-bar-track"><div class="score-bar-fill builder" data-width="50%"></div></div>
+          </div>
+        </div>
+        <div class="algo-side">
+          <div class="algo-side-label">Creator Score</div>
+          <div class="score-row">
+            <span class="score-label">Engagement Rate</span>
+            <div class="score-bar-track"><div class="score-bar-fill creator" data-width="82%"></div></div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Audience Size</span>
+            <div class="score-bar-track"><div class="score-bar-fill creator" data-width="55%"></div></div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Niche Relevance</span>
+            <div class="score-bar-track"><div class="score-bar-fill creator" data-width="78%"></div></div>
+          </div>
+          <div class="score-row">
+            <span class="score-label">Track Record</span>
+            <div class="score-bar-track"><div class="score-bar-fill creator" data-width="90%"></div></div>
+          </div>
+        </div>
+        <div class="algo-result">
+          <div class="algo-result-label">Suggested Revenue Share</div>
+          <div class="algo-result-value">22%</div>
+        </div>
+      </div>
+    </div>
+    <p class="algo-footer reveal reveal-delay-2">Data decides what's fair. Not who's a better negotiator.</p>
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 5: WHY REVENUE SHARING
+     ========================================== -->
+<section id="model">
+  <div class="container">
+    <div class="compare-header">
+      <div class="section-label reveal">THE MODEL</div>
+      <h2 class="reveal">Not equity. Not affiliates.<br>Revenue sharing.</h2>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card reveal">
+        <h3>Flat-Fee Sponsorship</h3>
+        <ul class="compare-list">
+          <li>
+            <svg class="compare-icon neutral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            One-time payment
+          </li>
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Creator moves on
+          </li>
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            No long-term alignment
+          </li>
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Relationship ends at the invoice
+          </li>
+        </ul>
+      </div>
+      <div class="compare-card reveal reveal-delay-1">
+        <h3>Equity Deals</h3>
+        <ul class="compare-list">
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Complex legal documents
+          </li>
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Months of negotiation
+          </li>
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Securities law complications
+          </li>
+          <li>
+            <svg class="compare-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Requires lawyers on both sides
+          </li>
+        </ul>
+      </div>
+      <div class="compare-card highlight reveal reveal-delay-2">
+        <h3>Revenue Sharing</h3>
+        <ul class="compare-list">
+          <li>
+            <svg class="compare-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Simple contract, sign in minutes
+          </li>
+          <li>
+            <svg class="compare-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Creator stays invested
+          </li>
+          <li>
+            <svg class="compare-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Grows with the product
+          </li>
+          <li>
+            <svg class="compare-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            No lawyers required
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="compare-footer reveal">Revenue sharing gives creators real ownership of the upside without the legal complexity of equity. Simple, aligned, scalable.</p>
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 6: VALUE PROPS (Tabbed)
+     ========================================== -->
+<section id="value">
+  <div class="container">
+    <div class="value-header">
+      <div class="section-label reveal">BUILT FOR BOTH SIDES</div>
+    </div>
+    <div class="value-tabs reveal">
+      <button class="value-tab active" data-tab="builders">For Builders</button>
+      <button class="value-tab" data-tab="creators">For Creators</button>
+    </div>
+
+    <div class="value-panel active" id="panel-builders">
+      <h2 class="reveal">Distribution without ad spend.</h2>
+      <div class="value-grid">
+        <div class="glass-card value-item reveal">
+          <h3>Creators who are invested in your success</h3>
+          <p>Not a one-off post. A partner who earns more when you earn more.</p>
+        </div>
+        <div class="glass-card value-item reveal reveal-delay-1">
+          <h3>Revenue-verified matching</h3>
+          <p>Every creator's audience data is verified. No fake followers. No inflated metrics.</p>
+        </div>
+        <div class="glass-card value-item reveal reveal-delay-2">
+          <h3>Legal templates included</h3>
+          <p>Standard revenue-sharing agreements. Sign in minutes, not months.</p>
+        </div>
+        <div class="glass-card value-item reveal reveal-delay-3">
+          <h3>Pay nothing upfront</h3>
+          <p>Platform fee applies only to revenue that actually flows. Zero risk to start.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="value-panel" id="panel-creators">
+      <h2>Build a portfolio of things you own.</h2>
+      <div class="value-grid">
+        <div class="glass-card value-item">
+          <h3>Passive income that compounds</h3>
+          <p>Your share grows as the products you promote grow. That's the whole point.</p>
+        </div>
+        <div class="glass-card value-item">
+          <h3>Full revenue transparency</h3>
+          <p>See real numbers through Stripe. Not estimates. Not dashboards someone can edit.</p>
+        </div>
+        <div class="glass-card value-item">
+          <h3>Authenticity built in</h3>
+          <p>You only promote what you co-own. Your audience knows the difference.</p>
+        </div>
+        <div class="glass-card value-item">
+          <h3>Your influence becomes an asset</h3>
+          <p>Stop trading time for flat fees. Start building a portfolio that pays you while you sleep.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 7: THE MATH
+     ========================================== -->
+<section id="math">
+  <div class="container">
+    <div class="math-layout">
+      <div class="math-text reveal">
+        <div class="section-label">THE MATH</div>
+        <h2>When the numbers start to matter.</h2>
+        <p>One product at $200/mo with a 25% share is $50/mo. Not life-changing. But builders grow. And you're not limited to one.</p>
+      </div>
+      <div class="math-visual reveal reveal-delay-1">
+        <div class="math-params">5 products, 25% average share</div>
+        <div class="math-row">
+          <span class="math-period">Month 1</span>
+          <div class="math-bar"><div class="math-bar-fill" data-width="10%"></div></div>
+          <span class="math-value" data-target="250">$250<span class="mono">/mo</span></span>
+        </div>
+        <div class="math-row">
+          <span class="math-period">Month 6</span>
+          <div class="math-bar"><div class="math-bar-fill" data-width="18%"></div></div>
+          <span class="math-value" data-target="443">$443<span class="mono">/mo</span></span>
+        </div>
+        <div class="math-row">
+          <span class="math-period">Month 12</span>
+          <div class="math-bar"><div class="math-bar-fill" data-width="32%"></div></div>
+          <span class="math-value" data-target="785">$785<span class="mono">/mo</span></span>
+        </div>
+        <div class="math-row">
+          <span class="math-period">Month 24</span>
+          <div class="math-bar"><div class="math-bar-fill" data-width="100%"></div></div>
+          <span class="math-value" data-target="2467">$2,467<span class="mono">/mo</span></span>
+        </div>
+        <div class="math-footer">That's not a side hustle. That's a portfolio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 8: FAQ
+     ========================================== -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <div class="section-label reveal">FAQ</div>
+      <h2 class="reveal">Questions you're thinking.</h2>
+    </div>
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Is this equity? Do I give up ownership of my company?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>No. Revenue sharing is not equity. You keep 100% ownership of your company. The creator earns a percentage of revenue for as long as the partnership is active.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How do you prevent creators from collecting without promoting?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Minimum activity requirements are built into every partnership. If promotion drops below the threshold, the revenue share pauses automatically until activity resumes.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How is revenue verified?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>All payments flow through Stripe Connect. The platform has full visibility into revenue. No self-reported numbers. No hidden income.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          What if I want to end a partnership?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Either side can terminate with 30 days notice. Clean exit. No penalties. No drama.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          What does it cost?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>5% platform fee on revenue processed through Co-Own. No upfront fees. No monthly subscriptions. You only pay when money flows.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How is this different from affiliate programs?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Affiliates earn a fixed commission rate that the company can change at any time. Co-Own partners earn a contractual share of revenue that grows as the product grows. One is a coupon. The other is ownership.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION 9: FINAL CTA
+     ========================================== -->
+<section class="final-cta" id="waitlist">
+  <div class="container">
+    <h2 class="reveal">The waitlist is open.</h2>
+    <p class="reveal reveal-delay-1">Be first. Whether you build software or grow audiences — this is how the game changes.</p>
+
+    <div class="waitlist-form reveal reveal-delay-2" id="waitlistForm">
+      <div class="waitlist-type">
+        <label><input type="radio" name="type" value="builder" checked> I'm a Builder</label>
+        <label><input type="radio" name="type" value="creator"> I'm a Creator</label>
+      </div>
+      <div class="waitlist-input-row">
+        <input type="email" id="waitlistEmail" placeholder="you@example.com" required>
+        <button class="waitlist-submit" id="waitlistBtn">Join the Waitlist</button>
+      </div>
+      <p class="waitlist-note">We'll let you know when it's time. No spam.</p>
+    </div>
+
+    <div class="waitlist-success" id="waitlistSuccess">
+      <h3>You're in.</h3>
+      <p>We'll reach out when it's time. Thanks for being early.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
+<footer>
+  <div class="container">
+    <p>Co-Own &copy; 2026</p>
+  </div>
+</footer>
+
+<!-- ==========================================
+     JavaScript
+     ========================================== -->
+<script>
+(function() {
+  'use strict';
+
+  /* ---- Mouse spotlight ---- */
+  const spotlight = document.querySelector('.bg-layer-spotlight');
+  if (spotlight) {
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.documentElement.style.setProperty('--spotlight-x', x + '%');
+      document.documentElement.style.setProperty('--spotlight-y', y + '%');
+    }, { passive: true });
+  }
+
+  /* ---- Nav scroll effect ---- */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ---- Scroll reveal (Intersection Observer) ---- */
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach(el => revealObs.observe(el));
+
+  /* ---- Score bar animations ---- */
+  const algoVisual = document.getElementById('algoVisual');
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const bars = e.target.querySelectorAll('.score-bar-fill');
+        bars.forEach((bar, i) => {
+          setTimeout(() => {
+            bar.style.width = bar.dataset.width;
+          }, i * 140);
+        });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  if (algoVisual) barObs.observe(algoVisual);
+
+  /* ---- Tab switching ---- */
+  const tabs = document.querySelectorAll('.value-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.value-panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('panel-' + tab.dataset.tab);
+      if (panel) {
+        panel.classList.add('active');
+        panel.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+          revealObs.observe(el);
+        });
+      }
+    });
+  });
+
+  /* ---- FAQ accordion ---- */
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', !wasOpen);
+    });
+  });
+
+  /* ---- Waitlist form ---- */
+  const waitlistBtn = document.getElementById('waitlistBtn');
+  const waitlistEmail = document.getElementById('waitlistEmail');
+  const waitlistForm = document.getElementById('waitlistForm');
+  const waitlistSuccess = document.getElementById('waitlistSuccess');
+
+  if (waitlistBtn) {
+    waitlistBtn.addEventListener('click', async () => {
+      const email = waitlistEmail.value.trim();
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        waitlistEmail.style.borderColor = '#ef4444';
+        waitlistEmail.focus();
+        return;
+      }
+      const type = document.querySelector('input[name="type"]:checked')?.value || 'builder';
+      waitlistBtn.textContent = 'Joining...';
+      waitlistBtn.disabled = true;
+
+      try {
+        const res = await fetch('/command/api/co-own/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, type })
+        });
+        if (res.ok) {
+          waitlistForm.style.display = 'none';
+          waitlistSuccess.classList.add('show');
+        } else {
+          const data = await res.json().catch(() => ({}));
+          if (data.error === 'duplicate') {
+            waitlistForm.style.display = 'none';
+            waitlistSuccess.querySelector('h3').textContent = 'You\'re already on the list.';
+            waitlistSuccess.querySelector('p').textContent = 'We\'ll be in touch soon.';
+            waitlistSuccess.classList.add('show');
+          } else {
+            throw new Error('Server error');
+          }
+        }
+      } catch (err) {
+        const saved = JSON.parse(localStorage.getItem('co-own-waitlist') || '[]');
+        saved.push({ email, type, ts: Date.now() });
+        localStorage.setItem('co-own-waitlist', JSON.stringify(saved));
+        waitlistForm.style.display = 'none';
+        waitlistSuccess.classList.add('show');
+      }
+    });
+
+    waitlistEmail.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') waitlistBtn.click();
+    });
+
+    waitlistEmail.addEventListener('input', () => {
+      waitlistEmail.style.borderColor = '';
+    });
+  }
+
+  /* ---- Math bar + counter animation ---- */
+  const mathVisual = document.querySelector('.math-visual');
+  if (mathVisual) {
+    const mathObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const bars = e.target.querySelectorAll('.math-bar-fill');
+          bars.forEach((bar, i) => {
+            setTimeout(() => { bar.style.width = bar.dataset.width; }, i * 160);
+          });
+          const vals = e.target.querySelectorAll('.math-value[data-target]');
+          vals.forEach((el, i) => {
+            const target = parseInt(el.dataset.target);
+            const suffix = '/mo';
+            const duration = 1400;
+            const start = performance.now();
+            setTimeout(() => {
+              function tick(now) {
+                const elapsed = now - start - i * 160;
+                const progress = Math.min(Math.max(elapsed / duration, 0), 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(eased * target);
+                el.innerHTML = '$' + current.toLocaleString() + '<span class="mono">' + suffix + '</span>';
+                if (progress < 1) requestAnimationFrame(tick);
+              }
+              requestAnimationFrame(tick);
+            }, i * 160);
+          });
+          mathObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    mathObs.observe(mathVisual);
+  }
+
+  /* ---- Smooth scroll for anchor links ---- */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ---- Hero button type preselect ---- */
+  document.querySelectorAll('.hero-buttons .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.textContent.toLowerCase();
+      if (text.includes('builder')) {
+        document.querySelector('input[value="builder"]').checked = true;
+      } else if (text.includes('creator')) {
+        document.querySelector('input[value="creator"]').checked = true;
+      }
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>

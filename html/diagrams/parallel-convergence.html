@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 800px;
+            background: #0a0a0a;
+        }
+        .title {
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+        .phase {
+            margin-bottom: 30px;
+        }
+        .phase-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .agents-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .agent {
+            width: 100px;
+            height: 70px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .agent-active {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+        .agent-dim {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #666;
+        }
+        .agent-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        .arrow-down {
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+        }
+        .arrow-down svg {
+            width: 24px;
+            height: 24px;
+        }
+        .critique-zone {
+            background: #1a1a1a;
+            border: 1px solid #ff6b6b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .critique-title {
+            color: #ff6b6b;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .critique-text {
+            color: #888;
+            font-size: 12px;
+            text-align: center;
+            font-style: italic;
+        }
+        .final-doc {
+            background: linear-gradient(135deg, #1a2e1a 0%, #162e16 100%);
+            border: 2px solid #00ff88;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+        .final-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .final-title {
+            color: #00ff88;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .final-subtitle {
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .repeat-badge {
+            display: inline-block;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 20px;
+            padding: 6px 16px;
+            color: #888;
+            font-size: 11px;
+            margin: 10px auto;
+        }
+    </style>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Parallel Agent Convergence</div>
+        
+        <div class="phase">
+            <div class="phase-label">Phase 1 — Spawn & Explore</div>
+            <div class="agents-row">
+                <div class="agent agent-active"><span class="agent-icon">🤖</span>Agent 1</div>
+                <div class="agent agent-active"><span class="agent-icon">🤖</span>Agent 2</div>
+                <div class="agent agent-active"><span class="agent-icon">🤖</span>Agent 3</div>
+                <div class="agent agent-active"><span class="agent-icon">🤖</span>Agent 4</div>
+                <div class="agent agent-active"><span class="agent-icon">🤖</span>Agent 5</div>
+                <div class="agent agent-active"><span class="agent-icon">🤖</span>Agent 6</div>
+            </div>
+            <div style="color: #666; font-size: 11px; text-align: center; margin-top: 8px;">Each researches independently → writes proposal</div>
+        </div>
+
+        <div class="arrow-down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+
+        <div class="critique-zone">
+            <div class="critique-title">⚔️ Critique Round</div>
+            <div class="critique-text">"Here's what's wrong with your approach. Here's what mine does better."</div>
+        </div>
+
+        <div class="arrow-down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+
+        <div class="phase">
+            <div class="phase-label">Phase 2 — Refinement</div>
+            <div class="agents-row">
+                <div class="agent agent-dim"><span class="agent-icon">💀</span>Dead</div>
+                <div class="agent agent-active"><span class="agent-icon">📄</span>Doc A</div>
+                <div class="agent agent-dim"><span class="agent-icon">💀</span>Dead</div>
+                <div class="agent agent-active"><span class="agent-icon">📄</span>Doc B</div>
+                <div class="agent agent-dim"><span class="agent-icon">💀</span>Dead</div>
+                <div class="agent agent-active"><span class="agent-icon">📄</span>Doc C</div>
+            </div>
+            <div style="color: #666; font-size: 11px; text-align: center; margin-top: 8px;">Weak ideas die. Strong ones absorb attacks & evolve.</div>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="repeat-badge">↻ Repeat until one survives</div>
+        </div>
+
+        <div class="arrow-down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+
+        <div class="final-doc">
+            <div class="final-icon">✨</div>
+            <div class="final-title">Final Document</div>
+            <div class="final-subtitle">Contains ideas that weren't in ANY of the originals</div>
+        </div>
+    </div>
+</body>
+</html>

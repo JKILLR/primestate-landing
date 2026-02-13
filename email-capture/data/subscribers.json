@@ -3,5 +3,20 @@
     "email": "test@example.com",
     "subscribedAt": "2026-02-02T05:03:00.775Z",
     "source": "blog"
+  },
+  {
+    "email": "blaakkew@gmail.com",
+    "subscribedAt": "2026-02-04T04:52:41.474Z",
+    "source": "blog"
+  },
+  {
+    "email": "test@test.com",
+    "subscribedAt": "2026-02-08T02:02:55.929Z",
+    "source": "blog"
+  },
+  {
+    "email": "duytantmdt@gmail.com",
+    "subscribedAt": "2026-02-12T09:22:44.962Z",
+    "source": "blog"
   }
 ]

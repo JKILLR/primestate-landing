@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cognitive Clarity Toolkit: 5 Inputs Worth Tracking — PrimeState</title>
+    <meta name="description" content="Not all inputs affect your brain equally. These 5 trackable inputs have the highest correlation with cognitive performance, backed by research and real-world data.">
+    <meta name="keywords" content="cognitive performance, brain optimization, mental clarity, focus improvement, brain fog causes, cognitive enhancement, mental performance tracking">
+    <link rel="canonical" href="https://primestate.dev/blog/cognitive-clarity-toolkit/">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Cognitive Clarity Toolkit: 5 Inputs Worth Tracking">
+    <meta property="og:description" content="Not all inputs affect your brain equally. These 5 have the highest impact on cognitive performance.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://primestate.dev/blog/cognitive-clarity-toolkit/">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Cognitive Clarity Toolkit: 5 Inputs Worth Tracking">
+    <meta name="twitter:description" content="5 inputs with the highest correlation to cognitive performance. Most people track zero of them.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+
+        :root {
+            --bg: #08080A;
+            --bg-card: #111114;
+            --bg-elevated: #18181C;
+            --text: #EDEDF0;
+            --text-dim: #8E8E98;
+            --text-muted: #55555E;
+            --green: #9AEF8C;
+            --green-20: rgba(154,239,140,0.20);
+            --green-10: rgba(154,239,140,0.10);
+            --green-05: rgba(154,239,140,0.04);
+            --cyan: #22D3EE;
+            --amber: #F59E0B;
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(154,239,140,0.20);
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 0 32px; }
+
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1; pointer-events: none;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(154,239,140,0.03) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(154,239,140,0.015) 0%, transparent 50%);
+        }
+        .noise {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1; pointer-events: none; opacity: 0.35;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-size: 256px;
+        }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 18px 0;
+            background: rgba(8,8,10,0.5);
+            backdrop-filter: blur(24px) saturate(1.5);
+            -webkit-backdrop-filter: blur(24px) saturate(1.5);
+            border-bottom: 1px solid transparent;
+            transition: all 0.4s ease;
+        }
+        header.scrolled {
+            padding: 12px 0;
+            border-bottom-color: var(--border);
+            background: rgba(8,8,10,0.85);
+        }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; max-width: 720px; margin: 0 auto; padding: 0 32px; }
+        .logo {
+            display: flex; align-items: center; gap: 6px;
+            font-family: var(--mono); font-size: 1rem;
+            text-decoration: none;
+        }
+        .logo-chevron { color: var(--text-muted); font-weight: 300; transition: color 0.3s; }
+        .logo:hover .logo-chevron { color: var(--green); }
+        .logo-name { color: var(--green); font-weight: 700; letter-spacing: 1.5px; font-size: 0.9rem; }
+        .logo-cursor { color: var(--green); animation: blink 1.2s step-end infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .header-link {
+            color: var(--text-dim); text-decoration: none;
+            font-size: 0.82rem; font-weight: 500; transition: color 0.25s;
+        }
+        .header-link:hover { color: var(--text); }
+        .header-link.active { color: var(--green); }
+
+        .btn-primary {
+            display: inline-flex; align-items: center;
+            background: var(--green); color: #000; padding: 10px 24px;
+            border-radius: 10px; text-decoration: none; font-weight: 700;
+            font-family: var(--mono);
+            font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.2px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(154,239,140,0.3), 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; height: 2px; z-index: 9999;
+            background: var(--green); transform-origin: left; transform: scaleX(0);
+            box-shadow: 0 0 10px var(--green);
+        }
+
+        main { padding-top: 90px; }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: var(--mono);
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.75rem; font-weight: 500;
+            margin-bottom: 28px;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--green); }
+
+        /* Article */
+        article { margin-bottom: 80px; }
+
+        .article-header { margin-bottom: 48px; }
+
+        .article-meta {
+            display: flex; gap: 12px; align-items: center;
+            font-family: var(--mono);
+            font-size: 0.68rem; color: var(--text-muted);
+            margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .article-tag {
+            font-size: 0.52rem; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--green); font-weight: 700;
+            padding: 4px 10px;
+            background: var(--green-10);
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-family: var(--mono);
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 700; line-height: 1.3;
+            margin-bottom: 20px; letter-spacing: -0.5px;
+        }
+
+        .article-intro {
+            font-size: 1.05rem; color: var(--text-dim);
+            border-left: 3px solid var(--green);
+            padding-left: 20px; line-height: 1.8;
+        }
+
+        /* Content */
+        .content h2 {
+            font-family: var(--mono);
+            font-size: 1.25rem; font-weight: 700;
+            margin-top: 48px; margin-bottom: 18px;
+            color: var(--green); letter-spacing: -0.3px;
+        }
+        .content h3 {
+            font-family: var(--mono);
+            font-size: 1.05rem; font-weight: 700;
+            margin-top: 32px; margin-bottom: 14px;
+        }
+        .content p {
+            margin-bottom: 18px; color: var(--text-dim);
+            font-size: 0.95rem; line-height: 1.85;
+        }
+        .content strong { color: var(--text); }
+        .content ul, .content ol {
+            margin-bottom: 18px; padding-left: 24px;
+            color: var(--text-dim); font-size: 0.95rem;
+        }
+        .content li { margin-bottom: 8px; line-height: 1.75; }
+        .content a { color: var(--cyan); text-decoration: none; }
+        .content a:hover { text-decoration: underline; }
+        .content a.cta-button { color: #000; }
+        .content a.cta-button:hover { text-decoration: none; }
+
+        /* Highlight box */
+        .highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--green);
+            padding: 20px 24px; margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .highlight-title {
+            font-family: var(--mono);
+            font-size: 0.6rem; color: var(--green);
+            margin-bottom: 8px; text-transform: uppercase;
+            letter-spacing: 2px; font-weight: 700;
+        }
+        .highlight p { margin-bottom: 0; }
+
+        /* Code block */
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px; margin: 24px 0;
+            font-family: var(--mono); font-size: 0.85rem;
+        }
+        .code-block .comment { color: var(--text-muted); }
+        .code-block .variable { color: var(--cyan); }
+        .code-block .value { color: var(--green); }
+
+        /* CTA box */
+        .cta-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px; margin: 48px 0;
+            text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .cta-box::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(154,239,140,0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .cta-box h3 { font-family: var(--mono); margin-top: 0; margin-bottom: 12px; }
+        .cta-box p { margin-bottom: 20px; }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--green); color: #000;
+            padding: 12px 24px; border-radius: 10px; border: none;
+            text-decoration: none; font-family: var(--mono);
+            font-weight: 700; font-size: 0.68rem;
+            text-transform: uppercase; letter-spacing: 1.2px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(154,239,140,0.4);
+        }
+
+        /* Footer */
+        footer {
+            padding: 36px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.72rem; color: var(--text-muted);
+        }
+        footer a { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+        footer a:hover { color: var(--green); }
+
+        @media (max-width: 600px) {
+            .container { padding: 0 20px; }
+            h1 { font-size: 1.4rem; }
+            .header-inner { padding: 0 20px; }
+        }
+
+    </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Cognitive Clarity Toolkit: 5 Inputs Worth Tracking",
+        "description": "Not all inputs affect your brain equally. These 5 trackable inputs have the highest correlation with cognitive performance.",
+        "datePublished": "2026-01-27",
+        "dateModified": "2026-01-27",
+        "author": {
+            "@type": "Organization",
+            "name": "PrimeState"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "PrimeState",
+            "url": "https://primestate.dev"
+        }
+    }
+    </script>
+<script defer src="https://analytics.primestate.dev/script.js" data-website-id="8d38aa26-1f13-4ee0-bd4a-3762d90a59ac"></script>
+</head>
+<body>
+    
+    
+        <div class="bg-mesh"></div>
+    <div class="noise"></div>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <header id="header">
+        <div class="header-inner">
+            <a class="logo" href="/">
+                <span class="logo-chevron">></span>
+                <span class="logo-name">PRIMESTATE</span>
+                <span class="logo-cursor">_</span>
+            </a>
+            <div class="header-actions">
+                <a href="/" class="header-link">Home</a>
+                <a href="/blog/" class="header-link active">Blog</a>
+                <a href="https://apps.apple.com/ca/app/primestate/id6757972046" class="btn-primary">Download</a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <a href="/blog/" class="back-link">← Back to blog</a>
+        
+        <article>
+            <div class="article-header">
+                <div class="article-meta">
+                    <span class="article-tag">Cognitive Performance</span>
+                    <span>January 27, 2026</span>
+                    <span>9 min read</span>
+                </div>
+                <h1>The Cognitive Clarity Toolkit: 5 Inputs Worth Tracking</h1>
+                <p class="article-intro">Your brain processes thousands of inputs daily. Most of them are noise. These five have the highest signal-to-noise ratio for cognitive performance — and most people track <em>zero</em> of them systematically.</p>
+            </div>
+            
+            <div class="content">
+                <h2>// the_input_output_framework</h2>
+                
+                <p>Think of your brain as a system. It takes inputs (food, sleep, exercise, substances, environment) and produces outputs (focus, creativity, reaction time, decision quality, mood). The system is deterministic — not random. Your bad days have causes. Your great days have causes. You just haven't identified them yet.</p>
+                
+                <p>The problem isn't that the causes don't exist. The problem is that <strong>there are too many potential inputs and the effects are often delayed</strong>. Without systematic tracking, your brain defaults to whatever explanation is most recent or most salient — "I slept badly" or "I'm stressed" — while the actual driver might be something you ate 48 hours ago or a workout you skipped three days ago.</p>
+                
+                <p>Not all inputs are created equal. Some have huge effects on cognition. Others are noise. After analyzing the research literature and real-world tracking data, these five inputs consistently produce the highest signal for cognitive performance.</p>
+                
+                <div class="code-block">
+                    <span class="comment">// your brain is a function</span><br><br>
+                    <span class="variable">cognitive_output</span> = <span class="value">f(</span><br>
+                    &nbsp;&nbsp;<span class="variable">sleep</span>,<br>
+                    &nbsp;&nbsp;<span class="variable">food</span>,<br>
+                    &nbsp;&nbsp;<span class="variable">exercise</span>,<br>
+                    &nbsp;&nbsp;<span class="variable">caffeine</span>,<br>
+                    &nbsp;&nbsp;<span class="variable">alcohol</span>,<br>
+                    &nbsp;&nbsp;<span class="comment">// + 100 other variables</span><br>
+                    <span class="value">)</span><br><br>
+                    <span class="comment">// most variables are noise</span><br>
+                    <span class="comment">// 5 of them explain ~80% of variance</span>
+                </div>
+                
+                <h2>// input_1: sleep_architecture</h2>
+                
+                <p>You already know sleep matters. But most people track the wrong thing about sleep.</p>
+                
+                <p><strong>What most people track:</strong> Total hours slept.<br>
+                <strong>What actually matters:</strong> Sleep consistency, sleep latency, and time in deep sleep.</p>
+                
+                <p>Research from Walker's Sleep Lab at UC Berkeley has shown that <strong>deep sleep (slow-wave sleep)</strong> is the primary phase responsible for memory consolidation, cognitive restoration, and toxin clearance via the glymphatic system. You can sleep 8 hours and get almost no deep sleep if you consumed alcohol, had caffeine too late, or went to bed at an irregular time.</p>
+                
+                <p>A 2019 study in <em>Science</em> demonstrated that the glymphatic system — your brain's waste-clearing mechanism — operates primarily during deep sleep. When deep sleep is disrupted, beta-amyloid and tau proteins accumulate. These aren't just Alzheimer's markers — they measurably impair next-day cognition even in healthy young adults.</p>
+                
+                <h3>What to track</h3>
+                
+                <ul>
+                    <li><strong>Bedtime consistency</strong> — Same time ±30 minutes, including weekends</li>
+                    <li><strong>Sleep latency</strong> — How long it takes to fall asleep (target: under 15 minutes)</li>
+                    <li><strong>Wake time consistency</strong> — Anchoring your wake time is even more important than bedtime</li>
+                    <li><strong>Subjective sleep quality</strong> — A simple 1-10 morning rating captures what wearables miss</li>
+                </ul>
+                
+                <div class="highlight">
+                    <div class="highlight-title">Why It Matters</div>
+                    <p>One night of poor sleep reduces cognitive throughput by 20-35% (Lim & Dinges, 2010). Two consecutive nights compound the effect non-linearly. But "poor sleep" isn't just about duration — it's about architecture. You can sabotage your deep sleep with a 4pm coffee and never realize the connection.</p>
+                </div>
+                
+                <h2>// input_2: dietary_composition</h2>
+                
+                <p>Not just what you eat, but what you ate <strong>24-72 hours ago.</strong> This is the input that almost everyone overlooks because the delay between cause and effect is too long for intuition to catch.</p>
+                
+                <p>The gut-brain axis is a bidirectional communication network between your enteric nervous system and your central nervous system. Research published in <em>Nature Reviews Neuroscience</em> has established that gut microbiome composition directly influences neurotransmitter production — your gut produces approximately <strong>95% of your body's serotonin</strong> and significant amounts of GABA and dopamine.</p>
+                
+                <p>When you eat something that disrupts your gut microbiome or triggers an inflammatory response, the cognitive effects don't manifest immediately. The inflammatory cascade, microbial population shifts, and neurotransmitter changes take time to propagate through the system.</p>
+                
+                <h3>What to track</h3>
+                
+                <ul>
+                    <li><strong>Meal composition</strong> — General categories: high-protein, high-carb, high-fat, processed, whole foods</li>
+                    <li><strong>Sugar intake</strong> — Refined sugar is one of the most consistent cognitive disruptors across individuals</li>
+                    <li><strong>Specific suspect foods</strong> — Gluten, dairy, alcohol, ultra-processed foods — your personal triggers</li>
+                    <li><strong>Timing relative to focus periods</strong> — Large meals before deep work versus after</li>
+                </ul>
+                
+                <p>The critical difference from standard food tracking: you're not tracking for calories or macros. You're tracking for <strong>cognitive correlation</strong>, with a 24-72 hour analysis window. What you ate Monday matters for Wednesday's thinking.</p>
+                
+                <h2>// input_3: physical_movement</h2>
+                
+                <p>Exercise is the most potent cognitive enhancer available without a prescription. The evidence base is enormous and the effect sizes are larger than any supplement or nootropic on the market.</p>
+                
+                <p>A meta-analysis in the <em>British Journal of Sports Medicine</em> (2019) covering 36 studies found that acute exercise improves cognitive function for <strong>up to 2 hours post-exercise</strong>, with the strongest effects on executive function and working memory. The mechanism is primarily increased BDNF, elevated catecholamine levels (dopamine, norepinephrine), and enhanced cerebral blood flow.</p>
+                
+                <p>But here's what the meta-analyses don't emphasize enough: <strong>the timing and type of exercise matter enormously for cognitive effects, and they vary by individual.</strong></p>
+                
+                <p>Some people get a massive focus boost from morning cardio. Others find that heavy strength training in the morning makes them mentally sluggish until noon. Some people focus better on rest days than exercise days. The research shows an average positive effect, but your personal response might diverge significantly from the mean.</p>
+                
+                <h3>What to track</h3>
+                
+                <ul>
+                    <li><strong>Exercise type</strong> — Cardio, strength, HIIT, yoga, walking</li>
+                    <li><strong>Timing</strong> — Morning, midday, evening</li>
+                    <li><strong>Intensity</strong> — Light, moderate, intense</li>
+                    <li><strong>Duration</strong> — 15 minutes hits differently than 60 minutes</li>
+                    <li><strong>Rest days</strong> — Track these too — the absence of exercise is data</li>
+                </ul>
+                
+                <div class="code-block">
+                    <span class="comment">// exercise → cognition (common patterns)</span><br><br>
+                    <span class="variable">morning_cardio_30min</span> → <span class="value">focus +25-40% for 2-4h</span><br>
+                    <span class="variable">morning_heavy_lifting</span> → <span class="value">focus -10% for 1h, then +20%</span><br>
+                    <span class="variable">evening_exercise</span> → <span class="value">next-day focus +15%</span><br>
+                    <span class="variable">no_exercise_3_days</span> → <span class="error">focus -20% baseline drift</span><br><br>
+                    <span class="comment">// YOUR pattern will differ — that's the point</span>
+                </div>
+                
+                <h2>// input_4: caffeine_protocol</h2>
+                
+                <p>Caffeine is the world's most widely used psychoactive substance. Approximately 90% of adults consume it daily. And approximately 90% of those people use it suboptimally.</p>
+                
+                <p>The issue isn't whether caffeine works — it clearly does. Caffeine blocks adenosine receptors, increasing alertness and reducing perceived fatigue. The issue is that most people use caffeine reactively ("I'm tired, drink coffee") rather than strategically ("I need peak focus at 10am, so I'll dose at 9:30am after my cortisol drops").</p>
+                
+                <p>Caffeine has a <strong>half-life of 3-7 hours</strong> depending on your genetics (CYP1A2 gene variant). This means timing and total daily dose interact in complex ways. A 200mg dose at 2pm could mean 100mg still active at 7pm for a slow metabolizer, or only 50mg remaining for a fast metabolizer. Same dose, radically different evening experiences.</p>
+                
+                <h3>What to track</h3>
+                
+                <ul>
+                    <li><strong>Timing of each dose</strong> — When exactly, not approximately</li>
+                    <li><strong>Amount</strong> — Estimate in mg (espresso ≈ 63mg, drip coffee ≈ 95mg, energy drink varies)</li>
+                    <li><strong>Last dose relative to bedtime</strong> — The gap matters more than you think</li>
+                    <li><strong>Days without caffeine</strong> — Tracking caffeine-free days reveals your baseline and tolerance level</li>
+                </ul>
+                
+                <p>The key insight is that caffeine's cognitive benefit isn't just about the boost — it's about <strong>what it costs you downstream</strong>. A 3pm coffee that gives you 90 minutes of afternoon focus might steal 30 minutes of deep sleep that night, which costs you 2 hours of focus tomorrow morning. Net effect: negative. But you'd never see that without tracking both the caffeine and the sleep.</p>
+                
+                <div class="highlight">
+                    <div class="highlight-title">The Caffeine Equation</div>
+                    <p>Caffeine isn't free energy. It's borrowed alertness with interest. The question isn't "does caffeine help?" — it does. The question is "does caffeine at THIS time, in THIS amount, produce a net positive over the next 24 hours?" That calculation is personal and requires data.</p>
+                </div>
+                
+                <h2>// input_5: alcohol_consumption</h2>
+                
+                <p>This is the input nobody wants to track and everybody needs to. Alcohol is unique among common substances in that its cognitive effects extend <strong>far beyond the obvious impairment period.</strong></p>
+                
+                <p>A 2018 study in <em>Addiction</em> found that even moderate alcohol consumption (1-2 drinks) measurably impaired cognitive function for <strong>up to 72 hours</strong>. Not the hangover — that's acute. The 72-hour effect operates through disrupted sleep architecture (even if you "sleep fine"), altered neurotransmitter balance, and systemic inflammation.</p>
+                
+                <p>Here's what makes alcohol so insidious from a tracking perspective: <strong>the worst cognitive day is usually day 2 or 3, not day 1.</strong> Day 1 you feel the hangover and attribute poor performance to it — obvious cause and effect. Day 2 you feel "recovered" and attribute any fog to other causes. Day 3 you have no idea your Thursday meeting went badly because of Tuesday's happy hour.</p>
+                
+                <p>Many people who track this input discover that they've been unknowingly operating at 70-80% capacity for years because they drink 2-3 times per week. The recovery windows overlap, and the "normal" they've calibrated to is actually a chronically impaired state.</p>
+                
+                <h3>What to track</h3>
+                
+                <ul>
+                    <li><strong>Number of drinks</strong> — Actual count, not "a few"</li>
+                    <li><strong>Type</strong> — Beer, wine, spirits (sugar content varies, affects the response)</li>
+                    <li><strong>Day and time</strong> — Weeknight drinking hits differently than weekend</li>
+                    <li><strong>Cognitive scores for 72 hours after</strong> — Not just the next day. Three full days.</li>
+                </ul>
+                
+                <div class="code-block">
+                    <span class="comment">// alcohol's hidden cognitive tax</span><br><br>
+                    <span class="variable">tuesday_night</span> = <span class="value">"3 beers"</span><br><br>
+                    <span class="variable">wednesday</span> = <span class="error">"hungover, expect bad day"</span> <span class="comment">// obvious</span><br>
+                    <span class="variable">thursday</span> = <span class="value">"feel fine"</span> <span class="comment">// feels recovered</span><br>
+                    <span class="variable">friday</span> = <span class="error">"unfocused, blame it on Friday"</span> <span class="comment">// still alcohol</span><br><br>
+                    <span class="comment">// without tracking, Friday's fog is "just Friday"</span><br>
+                    <span class="comment">// with tracking, it's clearly Tuesday's 3 beers</span>
+                </div>
+                
+                <h2>// the_input_output_loop</h2>
+                
+                <p>These five inputs don't operate in isolation. They interact in ways that make individual intuition almost useless:</p>
+                
+                <p><strong>Caffeine × Sleep:</strong> Late caffeine disrupts sleep architecture, which impairs next-day cognition, which drives more caffeine consumption. A vicious cycle that feels like a caffeine dependency but is actually a sleep debt spiral.</p>
+                
+                <p><strong>Exercise × Sleep:</strong> Morning exercise improves deep sleep quality, which improves next-day focus, which makes it easier to maintain the exercise habit. A virtuous cycle.</p>
+                
+                <p><strong>Food × Alcohol × Sleep:</strong> Alcohol disrupts sleep even in moderate amounts. Poor sleep increases cravings for high-sugar foods. High-sugar foods trigger inflammatory responses that impair cognition 48 hours later. Three inputs, interacting across three time windows.</p>
+                
+                <p><strong>Exercise × Food:</strong> Regular exercise improves insulin sensitivity, which means better blood sugar regulation, which means more stable energy and fewer cognitive dips after meals.</p>
+                
+                <p>These interaction effects are why optimizing one variable in isolation often fails. You clean up your diet but still drink three nights a week — the alcohol disrupts the sleep that would make the dietary improvements visible. You start exercising but don't adjust caffeine timing — the improved morning energy is masked by the same old caffeine schedule.</p>
+                
+                <div class="highlight">
+                    <div class="highlight-title">The Interaction Problem</div>
+                    <p>Cognitive performance is a multivariate optimization problem with delayed feedback loops. Changing one input while holding others constant gives you a partial picture. Tracking all five simultaneously — and analyzing their interactions — gives you the real picture. This is computationally trivial for software but practically impossible for a human brain.</p>
+                </div>
+                
+                <h2>// measuring_the_output</h2>
+                
+                <p>Tracking inputs is only half the equation. You also need a consistent way to measure cognitive output. Here's what works:</p>
+                
+                <p><strong>Subjective focus rating (1-10):</strong> Simple, fast, and surprisingly reliable when done consistently. Rate yourself at the same times each day. The key is consistency in timing and honesty in scoring.</p>
+                
+                <p><strong>Deep work hours:</strong> Count the hours of genuinely focused, uninterrupted work per day. This is an objective proxy for cognitive capacity that most knowledge workers can easily measure.</p>
+                
+                <p><strong>Task completion quality:</strong> Not just whether you finished tasks, but whether the output met your standards. Did you ship clean code or sloppy code? Did the writing flow or feel forced?</p>
+                
+                <p>You don't need all three. Pick one output metric and stick with it. The most important thing is that you measure it consistently at the same time every day for long enough to accumulate meaningful data — minimum 14 days, ideally 30+.</p>
+                
+                <h2>// getting_started_today</h2>
+                
+                <p>You don't need to track all five inputs from day one. That's how people burn out on tracking within a week. Start with the <strong>two highest-impact inputs</strong>:</p>
+                
+                <p><strong>Start with:</strong> Sleep consistency + caffeine timing. These two inputs are the easiest to track, interact strongly with each other, and produce visible cognitive effects within the first week.</p>
+                
+                <p><strong>Add after 2 weeks:</strong> Dietary composition (keep it simple — just note meal types, not calories).</p>
+                
+                <p><strong>Add after 4 weeks:</strong> Exercise patterns and alcohol consumption.</p>
+                
+                <p>At each stage, you're adding one layer of complexity while already having baseline data on the previous inputs. By week 4-6, you have a complete picture of the five major cognitive inputs and enough data to start seeing patterns.</p>
+                
+                <div class="code-block">
+                    <span class="comment">// progressive tracking protocol</span><br><br>
+                    <span class="variable">week_1_2</span> = <span class="value">["sleep_consistency", "caffeine_timing"]</span><br>
+                    <span class="variable">week_3_4</span> = <span class="value">+ ["dietary_composition"]</span><br>
+                    <span class="variable">week_5_6</span> = <span class="value">+ ["exercise", "alcohol"]</span><br><br>
+                    <span class="comment">// output metric: daily focus rating (1-10) at 10am + 2pm</span><br>
+                    <span class="comment">// minimum data for patterns: 14 days per input</span>
+                </div>
+                
+                <div style="margin: 40px 0; padding: 28px; background: rgba(20,20,20,0.8); border: 1px solid #222; border-radius: 8px;">
+                    <h3 style="font-family: 'JetBrains Mono', monospace; color: #00ff88; font-size: 0.85rem; margin-bottom: 16px;">// Related Research</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 8px;"><a href="/learn/best-supplements-for-brain-fog.html" style="color: #e0e0e0; text-decoration: none; border-bottom: 1px solid #333;">Best Supplements for Brain Fog</a></li>
+                        <li style="margin-bottom: 8px;"><a href="/learn/omega-3-and-brain-function.html" style="color: #e0e0e0; text-decoration: none; border-bottom: 1px solid #333;">Omega-3 and Brain Function</a></li>
+                        <li style="margin-bottom: 8px;"><a href="/learn/magnesium-threonate-and-sleep.html" style="color: #e0e0e0; text-decoration: none; border-bottom: 1px solid #333;">Magnesium Threonate and Sleep</a></li>
+                        <li style="margin-bottom: 8px;"><a href="/learn/creatine-and-cognitive-function.html" style="color: #e0e0e0; text-decoration: none; border-bottom: 1px solid #333;">Creatine and Cognitive Function</a></li>
+                        <li style="margin-bottom: 8px;"><a href="/learn/how-to-improve-cognitive-function-naturally.html" style="color: #e0e0e0; text-decoration: none; border-bottom: 1px solid #333;">How to Improve Cognitive Function Naturally</a></li>
+                    </ul>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Track the Inputs That Actually Matter</h3>
+                    <p>PrimeState makes it simple to log these five inputs and automatically finds the correlations — including delayed effects and interaction patterns your brain would never catch on its own.</p>
+                    <a href="https://apps.apple.com/ca/app/primestate/id6757972046" class="cta-button">Download Free</a>
+                </div>
+                
+                <h2>// the_bottom_line</h2>
+                
+                <p>Cognitive clarity isn't magic. It's not about willpower or discipline or grinding harder. It's about understanding the inputs that drive your brain's output and systematically optimizing them based on data, not guesses.</p>
+                
+                <p>These five inputs — sleep architecture, dietary composition, physical movement, caffeine protocol, and alcohol consumption — explain the vast majority of day-to-day cognitive variance for most people. Everything else is either noise or a much smaller signal hiding behind these five.</p>
+                
+                <p>Start tracking. Start simple. The patterns will emerge faster than you expect, and the insights will be more surprising than you think.</p>
+                
+                <p>Your brain runs on inputs. Know what they are, measure them, and optimize accordingly. That's the entire game.</p>
+            </div>
+        </article>
+    </main>
+    
+        <footer>
+        <div class="container">
+            <p>2026 PrimeState &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="mailto:support@primestate.dev">Contact</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const header = document.getElementById('header');
+        const scrollProg = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const st = window.scrollY;
+            const dh = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProg.style.transform = `scaleX(${st / dh})`;
+            header.classList.toggle('scrolled', st > 60);
+        }, { passive: true });
+    </script>
+</body>
+</html>
