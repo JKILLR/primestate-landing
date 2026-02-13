@@ -184,8 +184,8 @@ nav .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(--ac
 
 /* THE SYSTEM (pinned) */
 .system-headline {
-  font-size: clamp(26px, 3.5vw, 48px); font-weight: 800; letter-spacing: -2px;
-  line-height: 1.2; margin-bottom: 40px; max-width: 650px;
+  font-size: clamp(24px, 3vw, 42px); font-weight: 800; letter-spacing: -2px;
+  line-height: 1.2; margin-bottom: 20px; max-width: 650px;
 }
 .system-pipeline {
   display: grid; grid-template-columns: 1fr auto 1fr; gap: 40px; align-items: start;
@@ -322,9 +322,6 @@ footer {
   .chapter-item { grid-template-columns: 48px 1fr; gap: 20px; }
   .chapter-num { font-size: 32px; }
   .system-pipeline { grid-template-columns: 1fr; gap: 24px; }
-  .pipeline-divider { flex-direction: row; padding-top: 0; }
-  .pipeline-divider .line { width: 60px; height: 1px; }
-  .pipeline-divider .checkpoint { writing-mode: horizontal-tb; transform: none; }
   .author-content { grid-template-columns: 1fr; }
   .diff-grid { grid-template-columns: 1fr; }
   .hero-scroll { display: none; }
@@ -427,29 +424,46 @@ footer {
 
 <!-- THE SYSTEM (pinned) -->
 <section class="pin-section" id="system">
-  <div class="pin-content" style="padding-top: 22vh;">
+  <div class="pin-content" style="padding-top: 12vh; bottom: 40px;">
     <div class="section-label pin-item" id="sys-label">The App Incubator</div>
     <h2 class="system-headline pin-item" id="sys-head">Approve the architecture.<br>Go to sleep.<br><span style="color:var(--accent)">Wake up to an app.</span></h2>
-    <div class="system-pipeline pin-item" id="sys-pipe">
-      <div class="pipeline-col">
-        <h4>You + AI</h4>
-        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Context synthesis</span></div>
-        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Clarifying questions</span></div>
-        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Stack selection</span></div>
-        <div class="pipeline-step active"><div class="pipeline-dot"></div><span>Architecture review</span></div>
+    <p class="pin-item" id="sys-desc" style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; max-width: 560px; margin-bottom: 24px; opacity:0; transform:translateY(30px);">The App Incubator is a 9-stage pipeline. You make decisions in the first four stages. Then the AI builds autonomously — with quality gates after every phase.</p>
+    <div class="pin-item" id="sys-pipe" style="display:flex; flex-direction:column; gap:0; width:100%; max-width:680px;">
+      <!-- YOU + AI section -->
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:16px;">You + AI</div>
+        <div style="display:grid; grid-template-columns:28px 1fr; gap:6px 12px; align-items:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">01</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text);">Context synthesis</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— AI reads all your brainstorm docs</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">02</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text);">Clarifying questions</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— plain English, no jargon</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">03</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text);">Stack selection</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— pre-tested, version-pinned</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">04</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text);">Architecture review</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— your last decision</span></div>
+        </div>
       </div>
-      <div class="pipeline-divider">
-        <div class="line"></div>
-        <div class="checkpoint">Last checkpoint</div>
-        <div class="line"></div>
+      <!-- HANDOFF -->
+      <div style="display:flex; align-items:center; gap:16px; margin:16px 0; padding-left:40px;">
+        <div style="flex:1; height:1px; background:linear-gradient(90deg, var(--accent), rgba(45,212,191,0.15));"></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:3px; color:var(--accent); white-space:nowrap; padding:6px 16px; border:1px solid rgba(45,212,191,0.25); border-radius:100px;">You approve. AI takes over.</div>
+        <div style="flex:1; height:1px; background:linear-gradient(90deg, rgba(45,212,191,0.15), transparent);"></div>
       </div>
-      <div class="pipeline-col">
-        <h4>AI Only (autonomous)</h4>
-        <div class="pipeline-step"><div class="pipeline-dot"></div><span>BUILD_SPEC generation</span></div>
-        <div class="pipeline-step"><div class="pipeline-dot"></div><span>Asset generation</span></div>
-        <div class="pipeline-step"><div class="pipeline-dot"></div><span>BUILD_SEQUENCE</span></div>
-        <div class="pipeline-step"><div class="pipeline-dot"></div><span>Phased build + QA gates</span></div>
-        <div class="pipeline-step"><div class="pipeline-dot"></div><span>Post-build retrospective</span></div>
+      <!-- AI ONLY section -->
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted); margin-bottom:16px;">AI Only — Autonomous</div>
+        <div style="display:grid; grid-template-columns:28px 1fr; gap:6px 12px; align-items:center;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">05</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text-secondary);">BUILD_SPEC generation</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— every screen, color, interaction</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">06</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text-secondary);">Asset generation</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— icons, splash screens, illustrations</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">07</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text-secondary);">BUILD_SEQUENCE</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— phased plan with review gates</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">08</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text-secondary);">Autonomous build</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— 7-step QA after every phase</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-muted); text-align:right;">09</div>
+          <div><span style="font-size:14px; font-weight:600; color:var(--text-secondary);">Retrospective</span><span style="font-size:13px; color:var(--text-muted); margin-left:10px;">— system learns for next build</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -627,14 +641,15 @@ gsap.timeline({
   scrollTrigger: {
     trigger: "#system",
     start: "top top",
-    end: "+=350%",
+    end: "+=500%",
     pin: true,
     scrub: 0.8,
     anticipatePin: 1,
   }
 })
-.to("#sys-label", { opacity: 1, y: 0, duration: 1.5 }, 0)
-.to("#sys-head", { opacity: 1, y: 0, duration: 1.5 }, 1.5)
+.to("#sys-label", { opacity: 1, y: 0, duration: 1 }, 0)
+.to("#sys-head", { opacity: 1, y: 0, duration: 1 }, 1)
+.to("#sys-desc", { opacity: 1, y: 0, duration: 1 }, 2)
 .to("#sys-pipe", { opacity: 1, y: 0, duration: 1.5 }, 3);
 
 // Scroll reveals
