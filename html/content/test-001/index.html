@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slideshow Test #001 — Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; color: #fff; font-family: -apple-system, sans-serif; padding: 20px; }
+  h1 { font-size: 18px; margin-bottom: 8px; color: #2DD4BF; }
+  .hook { font-size: 14px; color: #888; margin-bottom: 4px; }
+  .caption { font-size: 13px; color: #666; margin-bottom: 20px; white-space: pre-line; max-width: 600px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; max-width: 1400px; }
+  .slide { position: relative; }
+  .slide img { width: 100%; border-radius: 8px; display: block; }
+  .slide .label { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); color: #2DD4BF; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>Test Slideshow #001</h1>
+<p class="hook">Hook: "My girlfriend said tracking supplements was a waste of time until I showed her my 3-month data"</p>
+<p class="caption">Caption: She rolled her eyes every time I logged a supplement. 90 days later, the data found a pattern my doctor missed. She downloaded the app that night.
+
+#cognition #supplements #biohacking #healthdata #brainhealth</p>
+<div class="grid">
+  <div class="slide"><span class="label">1 — Hook</span><img src="slide1_hook.png" alt="Slide 1"></div>
+  <div class="slide"><span class="label">2 — Before</span><img src="slide2_before.png" alt="Slide 2"></div>
+  <div class="slide"><span class="label">3 — Dashboard</span><img src="slide3_dashboard.png" alt="Slide 3"></div>
+  <div class="slide"><span class="label">4 — Correlation</span><img src="slide4_correlation.png" alt="Slide 4"></div>
+  <div class="slide"><span class="label">5 — Trend</span><img src="slide5_trend.png" alt="Slide 5"></div>
+  <div class="slide"><span class="label">6 — Proof</span><img src="slide6_proof.png" alt="Slide 6"></div>
+</div>
+</body>
+</html>
